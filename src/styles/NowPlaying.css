@@ -13,22 +13,25 @@
 }
 
 .np-title {
-  color: #f9fafb;
+  color: #111827;
+  font-family: 'Signika', 'Poppins', 'Open Sans', ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', sans-serif;
   font-weight: 800;
-  font-size: 22px;
+  font-size: 24px;
+  letter-spacing: 0.2px;
+  line-height: 1.2;
 }
 
 .np-tabs {
   display: flex;
   gap: 8px;
-  background: rgba(255,255,255,0.06);
+  background: rgba(0,0,0,0.06);
   padding: 4px;
   border-radius: 999px;
 }
 
 .np-tab {
   background: transparent;
-  color: #cbd5e1;
+  color: #374151;
   border: 0;
   padding: 8px 14px;
   border-radius: 999px;
@@ -36,8 +39,8 @@
 }
 
 .np-tab.active {
-  background: #374151;
-  color: #ffffff;
+  background: #e5e7eb;
+  color: #111827;
 }
 
 .np-grid {
@@ -81,6 +84,24 @@
 
 @media (min-width: 900px) {
   .np-embed-item { height: 88px; }
+}
+
+/* Dark mode overrides */
+.dark .np-title {
+  color: #f9fafb;
+}
+
+.dark .np-tabs {
+  background: rgba(255,255,255,0.06);
+}
+
+.dark .np-tab {
+  color: #cbd5e1;
+}
+
+.dark .np-tab.active {
+  background: #374151;
+  color: #ffffff;
 }
 
 

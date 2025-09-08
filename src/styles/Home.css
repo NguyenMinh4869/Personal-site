@@ -4,7 +4,7 @@
   min-height: 100vh;
   background-color: #ffffff;
   color: #333333;
-  transition: background-color 0.3s ease, color 0.3s ease;
+  transition: background-color 0.2s ease-in-out, color 0.2s ease-in-out;
   padding: 2rem 0;
 }
 
@@ -34,7 +34,7 @@
   padding: 0.5rem 1rem;
   border-radius: 8px;
   display: inline-block;
-  transition: background-color 0.3s ease;
+  transition: background-color 0.2s ease-in-out;
   position: relative;
   overflow: hidden;
   font-family: 'Poppins', sans-serif;
@@ -47,7 +47,7 @@
   color: #333;
   font-weight: 300;
   margin-left: 2px;
-  transition: color 0.3s ease;
+  transition: color 0.2s ease-in-out;
 }
 
 .home-container.dark .hero-title::after {
@@ -62,6 +62,28 @@
 }
 
 
+/* Enter animations */
+@keyframes fade-in-up {
+  0% {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.animate-fade-in-up {
+  opacity: 0;
+  animation: fade-in-up 0.45s ease-out forwards;
+}
+
+.delay-1 { animation-delay: 0.08s; }
+.delay-2 { animation-delay: 0.16s; }
+.delay-3 { animation-delay: 0.24s; }
+
+
 .home-container.dark .hero-title {
   background-color: transparent;
   color: #ffffff;
@@ -72,7 +94,7 @@
   line-height: 1.6;
   color: #666666;
   max-width: 600px;
-  transition: color 0.3s ease;
+  transition: color 0.2s ease-in-out;
 }
 
 .home-container.dark .hero-description {
@@ -89,7 +111,7 @@
   font-weight: 600;
   margin-bottom: 1.5rem;
   color: #333333;
-  transition: color 0.3s ease;
+  transition: color 0.2s ease-in-out;
 }
 
 .home-container.dark .section-title {
@@ -109,7 +131,7 @@
   padding: 0.75rem 1rem;
   background-color: #f8f9fa;
   border-radius: 8px;
-  transition: background-color 0.3s ease;
+  transition: background-color 0.2s ease-in-out;
 }
 
 .home-container.dark .stat-item {
@@ -124,7 +146,7 @@
   font-size: 0.9rem;
   font-weight: 500;
   color: #555555;
-  transition: color 0.3s ease;
+  transition: color 0.2s ease-in-out;
 }
 
 .home-container.dark .stat-value {

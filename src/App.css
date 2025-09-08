@@ -13,7 +13,7 @@ body {
   -moz-osx-font-smoothing: grayscale;
   background-color: #ffffff;
   color: #333333;
-  transition: background-color 0.3s ease, color 0.3s ease;
+  transition: background-color 0.2s ease-in-out, color 0.2s ease-in-out;
   padding-top: 80px; /* Space for fixed navbar */
 }
 
@@ -23,25 +23,20 @@ body.dark {
   color: #ffffff;
 }
 
-#root {
-  max-width: 1280px;
-  margin: 0 auto;
-  padding: 2rem;
-  text-align: center;
-}
+/* Removed #root constraints so layout is controlled by pages/components */
 
 .app-container {
   min-height: 100vh;
   background-color: inherit;
   color: inherit;
-  transition: background-color 0.3s ease, color 0.3s ease;
+  transition: background-color 0.2s ease-in-out, color 0.2s ease-in-out;
 }
 
 .main-content {
   min-height: calc(100vh - 80px);
   background-color: inherit;
   color: inherit;
-  transition: background-color 0.3s ease, color 0.3s ease;
+  transition: background-color 0.2s ease-in-out, color 0.2s ease-in-out;
 }
 
 .logo {
@@ -81,9 +76,59 @@ body.dark {
 
 .read-the-docs {
   color: #888;
-  transition: color 0.3s ease;
+  transition: color 0.2s ease-in-out;
 }
 
 body.dark .read-the-docs {
   color: #aaa;
+}
+/* Global styles - Thêm vào App.css hoặc index.css */
+
+/* Reset và đặt màu nền global */
+* {
+  box-sizing: border-box;
+}
+
+html {
+  background-color: #ffffff;
+  transition: background-color 0.2s ease-in-out;
+}
+
+body {
+  margin: 0;
+  padding: 0;
+  font-family: 'Poppins', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  background-color: #ffffff;
+  color: #333333;
+  transition: background-color 0.2s ease-in-out, color 0.2s ease-in-out;
+  /* Đảm bảo body luôn full height */
+  min-height: 100vh;
+}
+
+/* Dark mode cho toàn bộ document */
+html.dark {
+  background-color: #1a1a1a;
+}
+
+body.dark {
+  background-color: #1a1a1a;
+  color: #ffffff;
+}
+
+/* Root container */
+#root {
+  min-height: 100vh;
+  background-color: inherit;
+  transition: background-color 0.2s ease-in-out;
+}
+/* Thêm vào file CSS global */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0 !important;
+  padding: 0 !important;
 }

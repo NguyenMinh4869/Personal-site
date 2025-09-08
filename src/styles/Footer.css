@@ -1,47 +1,143 @@
+/* Footer.css */
+
 #footer {
-    display: flex !important;
-    flex-direction: column !important;
-    align-items: center !important;
-    justify-content: center !important;
-    padding: 32px 16px !important;
-    margin-top: 64px !important;
-    gap: 16px !important;
-}
-
-.social-icons {
-    display: flex !important;
-    align-items: center !important;
-    justify-content: center !important;
-    gap: 24px !important;
-    flex-wrap: wrap !important;
-}
-
-.social-icons a {
-    color: #9ca3af !important;
-    transition: all 0.3s ease !important;
-    display: flex !important;
-    align-items: center !important;
-    justify-content: center !important;
-    padding: 8px !important;
-    border-radius: 8px !important;
-    text-decoration: none !important;
-}
-
-.social-icons a:hover {
-    color: #374151 !important;
-    transform: translateY(-2px) !important;
-}
-
-.social-icons a svg {
-    font-size: 24px !important;
-    width: 24px !important;
-    height: 24px !important;
-}
-
-#footer p {
-    color: #6b7280 !important;
-    font-size: 14px !important;
-    text-align: center !important;
-    margin: 0 !important;
-    font-weight: 400 !important;
-}
+    background-color: #ffffff;
+    color: #333333;
+    padding: 2rem 0 1.5rem 0;
+    text-align: center;
+    border-top: 1px solid rgba(0, 0, 0, 0.08);
+    transition: background-color 0.2s ease-in-out, color 0.2s ease-in-out, border-top 0.2s ease-in-out;
+    width: 100%;
+    margin-top: auto;
+  }
+  
+  #footer.dark {
+    background-color: #1a1a1a;
+    color: #ffffff;
+    border-top: 1px solid rgba(255, 255, 255, 0.08);
+  }
+  
+  .social-icons {
+    display: flex;
+    justify-content: center;
+    gap: 1.5rem;
+    margin-bottom: 1.5rem;
+    flex-wrap: wrap;
+  }
+  
+  .social-icons a {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 45px;
+    height: 45px;
+    background-color: #f8f9fa;
+    color: #666666;
+    border-radius: 50%;
+    font-size: 1.2rem;
+    text-decoration: none;
+    transition: all 0.3s ease;
+    border: 1px solid rgba(0, 0, 0, 0.05);
+  }
+  
+  .social-icons a:hover {
+    background-color: #e9ecef;
+    color: #333333;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  }
+  
+  /* Dark mode styles for social icons */
+  #footer.dark .social-icons a {
+    background-color: #2a2a2a;
+    color: #cccccc;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+  }
+  
+  #footer.dark .social-icons a:hover {
+    background-color: #333333;
+    color: #ffffff;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+  }
+  
+  /* Specific colors for each social platform */
+  .social-icons a[aria-label="GitHub"]:hover {
+    background-color: #333333;
+    color: #ffffff;
+  }
+  
+  .social-icons a[aria-label="Discord"]:hover {
+    background-color: #5865f2;
+    color: #ffffff;
+  }
+  
+  .social-icons a[aria-label="YouTube"]:hover {
+    background-color: #ff0000;
+    color: #ffffff;
+  }
+  
+  .social-icons a[aria-label="LinkedIn"]:hover {
+    background-color: #0077b5;
+    color: #ffffff;
+  }
+  
+  .social-icons a[aria-label="Instagram"]:hover {
+    background: linear-gradient(45deg, #f09433, #e6683c, #dc2743, #cc2366, #bc1888);
+    color: #ffffff;
+  }
+  
+  .social-icons a[aria-label="Spotify"]:hover {
+    background-color: #1db954;
+    color: #ffffff;
+  }
+  
+  .social-icons a[aria-label="Email"]:hover {
+    background-color: #ea4335;
+    color: #ffffff;
+  }
+  
+  #footer p {
+    margin: 0;
+    font-size: 0.9rem;
+    color: #666666;
+    transition: color 0.2s ease-in-out;
+    font-family: 'Poppins', sans-serif;
+  }
+  
+  #footer.dark p {
+    color: #cccccc;
+  }
+  
+  /* Responsive design */
+  @media (max-width: 768px) {
+    #footer {
+      padding: 1.5rem 1rem 1rem 1rem;
+    }
+    
+    .social-icons {
+      gap: 1rem;
+      margin-bottom: 1rem;
+    }
+    
+    .social-icons a {
+      width: 40px;
+      height: 40px;
+      font-size: 1.1rem;
+    }
+    
+    #footer p {
+      font-size: 0.8rem;
+    }
+  }
+  
+  @media (max-width: 480px) {
+    .social-icons {
+      gap: 0.8rem;
+    }
+    
+    .social-icons a {
+      width: 38px;
+      height: 38px;
+      font-size: 1rem;
+    }
+  }

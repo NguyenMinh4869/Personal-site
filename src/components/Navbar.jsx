@@ -1,6 +1,7 @@
 import React from 'react';
 import '../styles/Navbar.css';
 import { useDarkMode } from '../contexts/DarkModeContext';
+import { NavLink } from 'react-router-dom';
 
 const Navbar = () => {
   const { isDarkMode, toggleDarkMode } = useDarkMode();
@@ -26,8 +27,16 @@ const Navbar = () => {
           {/* Center - Navigation links */}
           <div className="navbar-center">
             <ul className="nav-links">
-              <li><a href="#" className="nav-link active">Home</a></li>
-              <li><a href="#" className="nav-link">About</a></li>
+              <li>
+                <NavLink to="/" end className={({ isActive }) => `nav-link ${isActive ? 'active' : ''}`}>
+                  Home
+                </NavLink>
+              </li>
+              <li>
+                <NavLink to="/about" className={({ isActive }) => `nav-link ${isActive ? 'active' : ''}`}>
+                  About
+                </NavLink>
+              </li>
               <li><a href="#" className="nav-link">Gear</a></li>
               <li><a href="#" className="nav-link">Contact</a></li>
             </ul>

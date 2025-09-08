@@ -1,11 +1,14 @@
 import "../styles/Footer.css";
 import { Fade } from "react-awesome-reveal";
 import { FaGithub, FaDiscord, FaYoutube, FaLinkedin, FaInstagram, FaSpotify, FaEnvelope } from "react-icons/fa6";
+import { useDarkMode } from '../contexts/DarkModeContext';
 
 const Footer = () => {
+  const { isDarkMode } = useDarkMode();
+
   return (
     <Fade>
-      <footer id="footer">
+      <footer id="footer" className={isDarkMode ? 'dark' : ''}>
         <div className="social-icons">
           <a href="https://github.com/NguyenMinh4869" target="_blank" rel="noreferrer noopener" aria-label="GitHub">
             <FaGithub />

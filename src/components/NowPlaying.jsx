@@ -12,16 +12,36 @@ const NowPlaying = () => {
   const [recent, setRecent] = useState([]);
   const [featureBg, setFeatureBg] = useState('linear-gradient(145deg, #4338ca 0%, #312e81 100%)');
   const [recentBgs, setRecentBgs] = useState([]);
+  const [lastPlayed, setLastPlayed] = useState(null);
 
   useEffect(() => {
     let intervalId;
     const fetchNowPlaying = async () => {
       const data = await getNowPlaying();
       setNowPlaying(data);
+      
+      // Nếu có nhạc đang phát, lưu làm bài cuối cùng
+      if (data && data.title && data.title !== 'User is' && data.title !== 'Failed to') {
+        setLastPlayed(data);
+      }
     };
     const fetchRecent = async () => {
       const items = await getRecentlyPlayed(4);
       setRecent(items);
+      
+      // Nếu chưa có lastPlayed và có recent items, dùng bài đầu tiên
+      if (!lastPlayed && items && items.length > 0) {
+        const firstRecent = items[0];
+        setLastPlayed({
+          title: firstRecent.title,
+          artist: firstRecent.artists,
+          albumImageUrl: firstRecent.albumImageUrl,
+          songUrl: firstRecent.songUrl,
+          isPlaying: false,
+          timePlayed: 0,
+          timeTotal: firstRecent.durationMs
+        });
+      }
     };
     fetchNowPlaying();
     fetchRecent();
@@ -29,25 +49,33 @@ const NowPlaying = () => {
       fetchNowPlaying();
     }, 1000);
     return () => clearInterval(intervalId);
-  }, []);
+  }, [lastPlayed]);
 
   let playerState = '';
   let secondsPlayed = 0, minutesPlayed = 0, secondsTotal = 0, minutesTotal = 0;
   let albumImageUrl = '/images/albumCover.png';
   let title = '';
   let artist = '';
+  let displayData = null;
 
-  if (nowPlaying != null && nowPlaying.title) {
-    playerState = nowPlaying.isPlaying ? 'PLAY' : 'PAUSE';
-    secondsPlayed = Math.floor(nowPlaying.timePlayed / 1000);
+  // Ưu tiên hiển thị nhạc đang phát, nếu không có thì hiển thị bài cuối cùng
+  if (nowPlaying != null && nowPlaying.title && nowPlaying.title !== 'User is' && nowPlaying.title !== 'Failed to') {
+    displayData = nowPlaying;
+  } else if (lastPlayed) {
+    displayData = lastPlayed;
+  }
+
+  if (displayData) {
+    playerState = displayData.isPlaying ? 'PLAY' : 'PAUSE';
+    secondsPlayed = Math.floor(displayData.timePlayed / 1000);
     minutesPlayed = Math.floor(secondsPlayed / 60);
     secondsPlayed = secondsPlayed % 60;
-    secondsTotal = Math.floor(nowPlaying.timeTotal / 1000);
+    secondsTotal = Math.floor(displayData.timeTotal / 1000);
     minutesTotal = Math.floor(secondsTotal / 60);
     secondsTotal = secondsTotal % 60;
-    albumImageUrl = nowPlaying.albumImageUrl;
-    title = nowPlaying.title;
-    artist = nowPlaying.artist;
+    albumImageUrl = displayData.albumImageUrl;
+    title = displayData.title;
+    artist = displayData.artist;
   } else if (nowPlaying === 'Currently Not Playing') {
     playerState = 'OFFLINE';
     title = 'User is';
@@ -67,7 +95,7 @@ const NowPlaying = () => {
     return id ? `https://open.spotify.com/embed/track/${id}` : url;
   };
 
-  const href = playerState === 'PLAY' || playerState === 'PAUSE' ? toEmbedUrl(nowPlaying?.songUrl) : '';
+  const href = playerState === 'PLAY' || playerState === 'PAUSE' ? toEmbedUrl(displayData?.songUrl) : '';
 
   // Compute dominant/average color from album image to drive background
   // Helpers to compute gradient from image
@@ -147,10 +175,6 @@ const NowPlaying = () => {
     <div className="np-container">
       <div className="np-header">
         <div className="np-title">Recently Played</div>
-        <div className="np-tabs">
-          <button className="np-tab active">Recently Played</button>
-          <button className="np-tab">Top Tracks</button>
-        </div>
       </div>
       <div className="np-grid">
         {showFullEmbed && href ? (
@@ -188,23 +212,6 @@ const NowPlaying = () => {
                 style={{ backgroundImage: `url(${albumImageUrl})` }}
               />
             )}
-            <div className="np-feature-content">
-              <div className="np-feature-spotify"><FaSpotify size={22} /></div>
-              <div className="np-feature-art">
-                <img src={albumImageUrl} alt="Album" />
-              </div>
-              <div className={`np-feature-title ${title.length > 20 ? 'marquee-content' : ''}`}>{title}</div>
-              <div className="np-feature-artist">{artist}</div>
-              <div className="np-feature-save">
-                <span className="np-save-icon">+</span>
-                <span>Lưu trên Spotify</span>
-              </div>
-              <div className="nowPlayingTime">{pad(minutesPlayed)}:{pad(secondsPlayed)} / {pad(minutesTotal)}:{pad(secondsTotal)}</div>
-              <div className="np-feature-actions">
-                <BsThreeDots size={28} className="action" />
-                <AiFillPlayCircle size={44} className="action play" />
-              </div>
-            </div>
           </div>
         </a>
         )}

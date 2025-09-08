@@ -6,7 +6,7 @@ import NowPlaying from './NowPlaying';
 const Home = () => {
   const { isDarkMode } = useDarkMode();
   const [displayedText, setDisplayedText] = useState('');
-  const fullText = "hello, I'm Minh";
+  const fullText ="hello, I'm Minh";
   const [currentIndex, setCurrentIndex] = useState(0);
 
   useEffect(() => {
@@ -23,15 +23,15 @@ const Home = () => {
   return (
     <div className={`home-container ${isDarkMode ? 'dark' : ''}`}>
       <div className="home-content">
-        <div className="hero-section">
-          <h1 className="hero-title">
+        <div className="hero-section" style={{ paddingTop: '50px' }}>
+          <h1 className="hero-title animate-fade-in-up delay-1">
             {displayedText}
           </h1>
-          <p className="hero-description">
+          <p className="hero-description animate-fade-in-up delay-2">
             For now I really dont know what should I write here so he. he. he.
           </p>
         </div>
-        <div style={{ marginTop: '32px' }}>
+        <div style={{ marginTop: '32px' }} className="animate-fade-in-up delay-3">
           <NowPlaying />
         </div>
       </div>

@@ -1,0 +1,304 @@
+.about-container {
+  min-height: 100vh;
+  background-color: transparent;
+  color: inherit;
+  transition: background-color 0.2s ease-in-out, color 0.2s ease-in-out;
+  padding: 6rem 0 3rem; /* account for fixed navbar */
+}
+
+.about-container.dark {
+  background-color: transparent;
+  color: inherit;
+}
+
+.about-content {
+  max-width: 1000px;
+  margin: 0 auto;
+  padding: 0 2rem;
+}
+
+.about-header {
+  margin-bottom: 2.5rem;
+}
+
+.about-title {
+  font-size: 2.25rem;
+  font-weight: 800;
+  margin: 0;
+}
+
+.about-subtitle {
+  margin-top: 4px;
+  color: #666;
+}
+
+.about-container.dark .about-subtitle {
+  color: #bdbdbd;
+}
+
+.about-section {
+  margin: 2.5rem 0;
+}
+
+/* Collage */
+.photo-collage {
+  position: relative;
+  height: 350px;
+  width: 700px; /* center the whole collage block */
+  margin: 16px auto 32px; /* horizontally centered */
+  overflow: visible; /* allow dragging beyond container */
+}
+
+.collage-card {
+  position: absolute;
+  width: 260px;
+  height: 270px;
+  perspective: 1000px;
+  touch-action: none; /* prevent page scroll while dragging */
+  cursor: pointer;
+  transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1); /* smooth acceleration */
+}
+
+.flip {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  transform-style: preserve-3d;
+  transition: transform 0.55s ease;
+  border-radius: 12px;
+  box-shadow: 0 20px 40px rgba(0,0,0,0.35);
+  cursor: grab;
+  user-select: none;
+  -webkit-user-select: none;
+}
+
+.collage-card:hover .flip {
+  transform: rotateY(180deg);
+}
+
+/* Improve dragging UX */
+.collage-card.dragging { z-index: 50; }
+.collage-card.dragging .flip { cursor: grabbing; }
+
+.front, .back {
+  position: absolute;
+  inset: 0;
+  border-radius: 12px;
+  overflow: hidden;
+  backface-visibility: hidden;
+  user-select: none;
+  -webkit-user-select: none;
+}
+
+.front img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+  pointer-events: none; /* smoother drag (avoid image capturing events) */
+}
+
+.back {
+  background: #1e1e1e;
+  color: #eaeaea;
+  transform: rotateY(180deg);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.about-container.dark .back { background: #222; }
+
+.back-content { text-align: center; padding: 16px; }
+.back-title { font-weight: 700; margin-bottom: 6px; }
+.back-sub { opacity: 0.8; margin-bottom: 8px; }
+.back p { opacity: 0.9; margin: 0; }
+
+.img-1 { left: -10px; top: 40px; transform: rotate(-6deg); }
+.img-2 { left: 140px; top: 10px; transform: rotate(-2deg); }
+.img-3 { left: 320px; top: 0px; transform: rotate(4deg); }
+.img-4 { left: 520px; top: 20px; transform: rotate(6deg); }
+
+@media (max-width: 900px) {
+  .photo-collage { height: 220px; width: 360px; margin: 16px auto 24px; }
+  .collage-card { width: 200px; height: 140px; }
+  .img-1 { left: 0; top: 40px; }
+  .img-2 { left: 110px; top: 10px; }
+  .img-3 { left: 220px; top: 0; }
+  .img-4 { left: 330px; top: 20px; }
+}
+
+.about-section-title {
+  font-size: 1.25rem;
+  font-weight: 700;
+  margin-bottom: 1rem;
+}
+
+.timeline {
+  border-left: 2px solid rgba(100,100,100,0.3);
+  margin: 1rem 0 0 8px;
+  padding-left: 24px;
+}
+
+.timeline-item {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 16px;
+  padding: 14px 0;
+}
+
+.timeline-left {
+  display: flex;
+  gap: 12px;
+  align-items: flex-start;
+}
+
+.dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  margin-top: 8px;
+}
+
+.dot-blue { background: #3b82f6; }
+.dot-yellow { background: #eab308; }
+.dot-green { background: #22c55e; }
+.dot-red { background: #ef4444; }
+
+.item-title { font-weight: 700; }
+.item-subtitle { font-style: italic; opacity: 0.9; }
+.item-bullets { margin: 6px 0 0 16px; color: #666; }
+.about-container.dark .item-bullets { color: #cfcfcf; }
+
+.timeline-right { opacity: 0.7; white-space: nowrap; }
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 16px;
+}
+
+.grid-two {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+.card {
+  background: #f7f7f7;
+  border-radius: 12px;
+  padding: 16px;
+  position: relative;
+}
+
+.about-container.dark .card { background: #191919; }
+
+.card-with-preview {
+  overflow: visible;
+}
+
+.card-preview {
+  position: absolute;
+  top: 100%;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 100;
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 0.3s ease, visibility 0.3s ease;
+  pointer-events: none;
+  margin-top: 8px;
+}
+
+.card-preview img {
+  width: 300px;
+  height: auto;
+  border-radius: 8px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+  border: 2px solid #e5e7eb;
+}
+
+.about-container.dark .card-preview img {
+  border-color: #374151;
+}
+
+.card-with-preview:hover .card-preview {
+  opacity: 1;
+  visibility: visible;
+}
+
+.card-title { font-weight: 700; margin-bottom: 6px; }
+
+.card-title-link {
+  text-decoration: none;
+  color: inherit;
+  transition: color 0.2s ease;
+}
+
+.card-title-link:hover {
+  color: #3b82f6;
+}
+
+.about-container.dark .card-title-link:hover {
+  color: #60a5fa;
+}
+.card-desc { color: #666; margin-bottom: 10px; }
+.about-container.dark .card-desc { color: #cfcfcf; }
+
+.badges { display: flex; flex-wrap: wrap; gap: 8px; }
+.badges span {
+  font-size: 12px;
+  background: rgba(0,0,0,0.06);
+  padding: 4px 10px;
+  border-radius: 999px;
+  color: white;
+  font-weight: 500;
+}
+.about-container.dark .badges span { background: rgba(255,255,255,0.08); }
+
+/* Colorful badge styles */
+.badge-react {
+  background: #61dafb !important;
+  color: #000 !important;
+}
+.badge-spotify {
+  background: #1db954 !important;
+  color: white !important;
+}
+.badge-js {
+  background: #f7df1e !important;
+  color: #000 !important;
+}
+.badge-tailwind {
+  background: #06b6d4 !important;
+  color: white !important;
+}
+.badge-node {
+  background: #339933 !important;
+  color: white !important;
+}
+.badge-csharp {
+  background: #239120 !important;
+  color: white !important;
+}
+.badge-firebase {
+  background: #ffca28 !important;
+  color: #000 !important;
+}
+.badge-tmdb {
+  background: #01d277 !important;
+  color: white !important;
+}
+
+.hobby { padding: 8px 0; }
+.hobby-title { font-weight: 700; }
+.hobby-desc { color: #666; }
+.about-container.dark .hobby-desc { color: #cfcfcf; }
+.hobby-link { color: #3b82f6; text-decoration: none; }
+.positive { color: #10b981; }
+
+@media (max-width: 900px) {
+  .grid { grid-template-columns: 1fr; }
+  .grid-two { grid-template-columns: 1fr; }
+}
+
+
