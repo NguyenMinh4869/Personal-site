@@ -3,6 +3,8 @@ import './App.css'
 import Navbar from './components/Navbar'
 import Home from './components/Home'
 import { DarkModeProvider } from './contexts/DarkModeContext'
+import Footer from './components/Footer'
+
 
 function App() {
   return (
@@ -12,6 +14,7 @@ function App() {
         <main className="main-content">
           <Home />
         </main>
+        <Footer />
       </div>
     </DarkModeProvider>
   )

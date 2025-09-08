@@ -47,6 +47,11 @@
   color: #333;
   font-weight: 300;
   margin-left: 2px;
+  transition: color 0.3s ease;
+}
+
+.home-container.dark .hero-title::after {
+  color: #ffffff;
 }
 
 

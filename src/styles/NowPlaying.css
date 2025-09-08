@@ -1,0 +1,106 @@
+@import url('https://fonts.googleapis.com/css2?family=Open+Sans:ital,wght@0,300..800;1,300..800&family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&family=Signika:wght@300..700&display=swap');
+.np-container {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  font-family: 'Poppins', 'Open Sans', 'Signika', ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', sans-serif;
+}
+
+.np-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.np-title {
+  color: #f9fafb;
+  font-weight: 800;
+  font-size: 22px;
+}
+
+.np-tabs {
+  display: flex;
+  gap: 8px;
+  background: rgba(255,255,255,0.06);
+  padding: 4px;
+  border-radius: 999px;
+}
+
+.np-tab {
+  background: transparent;
+  color: #cbd5e1;
+  border: 0;
+  padding: 8px 14px;
+  border-radius: 999px;
+  cursor: pointer;
+}
+
+.np-tab.active {
+  background: #374151;
+  color: #ffffff;
+}
+
+.np-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 2px;
+  align-items: stretch;
+}
+
+@media (min-width: 900px) {
+  .np-grid {
+    grid-template-columns: 1fr 1fr;
+    align-items: start;
+    gap: 28px;
+  }
+  .np-grid > * { min-width: 0; }
+}
+
+.np-feature-link { display: block; height: 100%; }
+
+
+/* Right column wrapper: stack 4 items vertically with small spacing */
+.np-list {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  align-self: start;
+}
+
+.np-embed-item {
+  border-radius: 12px;
+  overflow: hidden;
+  height: 84px;
+}
+
+.np-embed-item iframe {
+  width: 100%;
+  height: 100%;
+  border: none;
+}
+
+@media (min-width: 900px) {
+  .np-embed-item { height: 88px; }
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

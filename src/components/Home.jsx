@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useDarkMode } from '../contexts/DarkModeContext';
 import "../styles/Home.css";
+import NowPlaying from './NowPlaying';
 
 const Home = () => {
   const { isDarkMode } = useDarkMode();
@@ -30,8 +31,9 @@ const Home = () => {
             For now I really dont know what should I write here so he. he. he.
           </p>
         </div>
-        
-       
+        <div style={{ marginTop: '32px' }}>
+          <NowPlaying />
+        </div>
       </div>
     </div>
   );
