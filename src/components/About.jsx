@@ -214,7 +214,7 @@ const About = () => {
                 <span className="dot dot-red" />
                 <div>
                   <div className="item-title">FPT Software</div>
-                  <div className="item-subtitle">Intern</div>
+                  <div className="item-subtitle">Software Development Engineer Intern</div>
                  
                 </div>
               </div>

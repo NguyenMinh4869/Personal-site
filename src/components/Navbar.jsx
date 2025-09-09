@@ -1,8 +1,9 @@
 import React from 'react';
 import '../styles/Navbar.css';
 import { useDarkMode } from '../contexts/DarkModeContext';
-import { NavLink, useLocation } from 'react-router-dom';
+import { NavLink, useLocation, Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
+import avatarImg from '../assets/avatar.jpg';
 
 const Navbar = () => {
   const { isDarkMode, toggleDarkMode } = useDarkMode();
@@ -30,12 +31,14 @@ const Navbar = () => {
         <div className="navbar-content">
           {/* Left side - Profile image */}
           <div className="navbar-left">
-            <div className="profile-image">
-              <img 
-                src="https://jbagy.me/wp-content/uploads/2025/03/Hinh-anh-avatar-anime-nu-cute-2.jpg" 
-                alt="Profile" 
-              />
-            </div>
+            <Link to="/" className="profile-link" aria-label="Go to home">
+              <div className="profile-image">
+                <img 
+                  src={avatarImg} 
+                  alt="Profile" 
+                />
+              </div>
+            </Link>
           </div>
           
           {/* Center - Navigation links */}

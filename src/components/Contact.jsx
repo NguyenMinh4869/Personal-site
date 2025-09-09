@@ -2,6 +2,7 @@ import React from 'react';
 import { useDarkMode } from '../contexts/DarkModeContext';
 import '../styles/Contact.css';
 import { FaEnvelope, FaInstagram, FaLinkedin, FaDiscord } from 'react-icons/fa6';
+import { FaFacebook, FaGit, FaGithub } from 'react-icons/fa';
 
 const ContactCard = ({ href, title, subtitle, Icon }) => {
   return (
@@ -56,6 +57,18 @@ const Contact = () => {
             title="Discord"
             subtitle="Join Server"
             Icon={FaDiscord}
+          />
+          <ContactCard
+            href="https://www.facebook.com/nguyen.minh.745019/"
+            title="Facebook"
+            subtitle="Nguyen Minh"
+            Icon={FaFacebook}
+          />
+          <ContactCard
+            href="https://github.com/NguyenMinh4869"
+            title="Github"
+            subtitle="/NguyenMinh4869"
+            Icon={FaGithub}
           />
         </div>
       </div>

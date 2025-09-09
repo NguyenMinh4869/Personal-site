@@ -60,19 +60,42 @@ body, html {
 }
 
 .profile-image {
-  width: 40px;
-  height: 40px;
+  width: 34px;
+  height: 34px;
   border-radius: 50%;
   overflow: hidden;
   background-color: #ddd;
   border: 2px solid #fff;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.12);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
 }
 
 .profile-image img {
   width: 100%;
   height: 100%;
   object-fit: cover;
+}
+
+.profile-link {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 9999px;
+  transition: transform 0.2s ease;
+}
+
+.profile-link:hover .profile-image {
+  transform: scale(1.06);
+  box-shadow: 0 8px 22px rgba(0,0,0,0.18);
+}
+
+.profile-link:active .profile-image {
+  transform: scale(0.98);
+}
+
+.profile-link:focus-visible .profile-image {
+  outline: 3px solid rgba(59,130,246,0.7);
+  outline-offset: 2px;
 }
 
 /* Center - Navigation */
