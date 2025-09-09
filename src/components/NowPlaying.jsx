@@ -178,7 +178,7 @@ const NowPlaying = () => {
       </div>
       <div className="np-grid">
         {showFullEmbed && href ? (
-          <div className="np-embed-full">
+          <div className="np-embed-full fade-in">
             <iframe
               title="spotify-embed-full"
               src={href}
@@ -191,7 +191,7 @@ const NowPlaying = () => {
           </div>
         ) : (
         <a className="np-feature-link" href={href} style={{ textDecoration: 'none' }}>
-          <div className="nowPlayingCard np-feature" style={{ background: useEmbedBackground ? 'transparent' : featureBg }}>
+          <div className="nowPlayingCard np-feature fade-in" style={{ background: useEmbedBackground ? 'transparent' : featureBg }}>
             {useEmbedBackground ? (
               <div className="np-embed-bg-iframe" aria-hidden>
                 {href && (
@@ -216,7 +216,7 @@ const NowPlaying = () => {
         </a>
         )}
         {useEmbed && href && (
-          <div style={{ gridColumn: '1 / span 1' }}>
+          <div style={{ gridColumn: '1 / span 1' }} className="fade-in">
             <iframe
               style={{ borderRadius: '12px', border: 'none' }}
               src={href}
@@ -232,7 +232,7 @@ const NowPlaying = () => {
           <div className="np-list">
             {recent.slice(0, 4).map((t, idx) => (
               showFullEmbedRight ? (
-                <div key={`${t.id}-${idx}`} className="np-embed-item">
+                <div key={`${t.id}-${idx}`} className="np-embed-item fade-in">
                   <iframe
                     title={`spotify-embed-item-${idx}`}
                     src={toEmbedUrl(t.songUrl)}
@@ -245,7 +245,7 @@ const NowPlaying = () => {
                 </div>
               ) : (
                 <a key={`${t.id}-${idx}`} href={toEmbedUrl(t.songUrl)} style={{ textDecoration: 'none' }}>
-                  <div className="nowPlayingCard np-item" style={{ background: recentBgs[idx] }}>
+                  <div className="nowPlayingCard np-item fade-in" style={{ background: recentBgs[idx] }}>
                     <div className="nowPlayingImage">
                       <img src={t.albumImageUrl} alt="Album" />
                     </div>

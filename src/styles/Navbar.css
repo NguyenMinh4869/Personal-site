@@ -82,12 +82,20 @@ body, html {
   justify-content: center;
 }
 
+.nav-links-container {
+  position: relative;
+  display: flex;
+  justify-content: center;
+}
+
 .nav-links {
   display: flex;
   list-style: none;
   margin: 0;
   padding: 0;
-  gap: 8px;
+  gap: 16px;
+  position: relative;
+  z-index: 2;
 }
 
 .nav-link {
@@ -99,19 +107,32 @@ body, html {
   font-weight: 500;
   font-family: 'Poppins', sans-serif;
   border-radius: 20px;
-  transition: all 0.2s ease-in-out;
+  transition: color 0.2s ease-in-out;
   position: relative;
+  width: 120px;
+  text-align: center;
+  z-index: 3;
 }
 
 .nav-link:hover {
   color: #333;
-  background-color: rgba(0, 0, 0, 0.05);
 }
 
 .nav-link.active {
-  background-color: #ddd;
   color: #333;
   font-weight: 600;
+}
+
+/* Animated background indicator */
+.nav-indicator {
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 100%;
+  background-color: #ddd;
+  border-radius: 20px;
+  z-index: 1;
+  pointer-events: none;
 }
 
 /* Right side - Dark mode toggle */
@@ -122,6 +143,7 @@ body, html {
 .dark-mode-toggle {
   background: none;
   border: none;
+  outline: none;
   cursor: pointer;
   padding: 8px;
   border-radius: 50%;
@@ -132,17 +154,28 @@ body, html {
 }
 
 .dark-mode-toggle:hover {
-  background-color: rgba(0, 0, 0, 0.1);
+  background-color: transparent;
 }
 
-.moon-icon {
+.dark-mode-toggle:focus {
+  outline: none;
+  box-shadow: none;
+}
+
+.dark-mode-toggle:active {
+  outline: none;
+  box-shadow: none;
+}
+
+.moon-icon, .sun-icon {
   width: 20px;
   height: 20px;
   color: #666;
   transition: color 0.3s ease;
 }
 
-.dark-mode-toggle:hover .moon-icon {
+.dark-mode-toggle:hover .moon-icon,
+.dark-mode-toggle:hover .sun-icon {
   color: #333;
 }
 
@@ -162,23 +195,27 @@ body, html {
 
 .navbar-container.dark .nav-link:hover {
   color: #fff;
-  background-color: rgba(255, 255, 255, 0.1);
 }
 
 .navbar-container.dark .nav-link.active {
-  background-color: #333;
   color: #fff;
 }
 
-.navbar-container.dark .moon-icon {
+.navbar-container.dark .nav-indicator {
+  background-color: #333;
+}
+
+.navbar-container.dark .moon-icon,
+.navbar-container.dark .sun-icon {
   color: #ccc;
 }
 
 .navbar-container.dark .dark-mode-toggle:hover {
-  background-color: rgba(255, 255, 255, 0.1);
+  background-color: transparent;
 }
 
-.navbar-container.dark .dark-mode-toggle:hover .moon-icon {
+.navbar-container.dark .dark-mode-toggle:hover .moon-icon,
+.navbar-container.dark .dark-mode-toggle:hover .sun-icon {
   color: #fff;
 }
 
@@ -202,12 +239,17 @@ body, html {
   }
   
   .nav-links {
-    gap: 4px;
+    gap: 8px;
   }
   
   .nav-link {
     padding: 6px 12px;
     font-size: 13px;
+    width: 80px;
+  }
+  
+  .nav-indicator {
+    width: 80px !important;
   }
 }
 

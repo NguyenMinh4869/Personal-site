@@ -1,4 +1,4 @@
-import React, { useRef, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { useDarkMode } from '../contexts/DarkModeContext';
 import '../styles/About.css';
 import img1 from '../assets/anh1.jpg';
@@ -69,12 +69,20 @@ const DraggableCard = ({ className, rotationDeg, children }) => {
 const About = () => {
   const { isDarkMode } = useDarkMode();
 
+  useEffect(() => {
+    // add page fade once on mount
+    const root = document.querySelector('.about-content');
+    if (root) {
+      root.classList.add('page-fade-in');
+    }
+  }, []);
+
   return (
     <div className={`about-container ${isDarkMode ? 'dark' : ''}`}>
       <div className="about-content">
         <header className="about-header">
-          <h1 className="about-title">About me.</h1>
-          <p className="about-subtitle"></p>
+          <h1 className="about-title animate-fade-in-up delay-1">About me.</h1>
+          <p className="about-subtitle animate-fade-in-up delay-2">Welcome to my personal space where I share my journey, projects, and experiences.</p>
         </header>
 
         {/* Photo collage */}
@@ -141,56 +149,67 @@ const About = () => {
         </div>
 
        
-        <Section title="Projects">
-          <div className="grid">
-            <div className="card card-with-preview">
-              <a href="https://github.com/NguyenMinh4869/Movie-Theater" target="_blank" rel="noopener noreferrer" className="card-title-link">
-                <div className="card-title">Movie Theater</div>
-              </a>
-              <div className="card-desc">Movie Theater is a project for managing showtimes, bookings, and customer information, with a user-friendly interface for both staff and customers.</div>
-              <div className="badges">
-                <span className="badge-csharp">C#</span><span className="badge-js">JavaScript</span>
+        <div className="about-section section-aside-grid stagger-fade">
+          <h2 className="about-section-title">Projects</h2>
+          <div className="project-list">
+            <div className="project-item">
+              <div className="project-main">
+                <a href="https://github.com/NguyenMinh4869/Movie-Theater" target="_blank" rel="noopener noreferrer" className="project-link">
+                  <div className="project-name">Movie Theater</div>
+                </a>
+                <div className="project-desc">Project to manage showtimes, bookings, and customer information; easy-to-use for both staff and customers.</div>
               </div>
-              <div className="card-preview">
-                <img src={movieTheaterPreview} alt="Movie Theater Preview" />
+              <div className="project-tags badges">
+                <span className="badge-csharp">C#</span>
+                <span className="badge-js">JavaScript</span>
+                <span className="badge-css">CSS</span>
+                <span className="badge-html">HTML</span>
               </div>
+              <div className="project-preview"><img src={movieTheaterPreview} alt="Movie Theater Preview" /></div>
             </div>
 
-            <div className="card card-with-preview">
-              <a href="https://github.com/NguyenMinh4869/netflix-clone" target="_blank" rel="noopener noreferrer" className="card-title-link">
-                <div className="card-title">Netflix Clone</div>
-              </a>
-              <div className="card-desc">A Netflix-inspired web app for browsing and streaming movies, featuring Firebase authentication, category browsing with TheMovieDB API, YouTube trailers, and a fast React + Vite build.</div>
-              <div className="badges">
-                <span className="badge-react">React</span><span className="badge-firebase">Firebase</span><span className="badge-tmdb">TheMovieDB</span><span className="badge-js">JavaScript</span>
+            <div className="project-item">
+              <div className="project-main">
+                <a href="https://github.com/NguyenMinh4869/netflix-clone" target="_blank" rel="noopener noreferrer" className="project-link">
+                  <div className="project-name">Netflix Clone</div>
+                </a>
+                <div className="project-desc">Browse and stream movies with Firebase auth, categories from TheMovieDB, embedded YouTube trailers, and a fast React + Vite stack.</div>
               </div>
-              <div className="card-preview">
-                <img src={netflixPreview} alt="Netflix Clone Preview" />
+              <div className="project-tags badges">
+                <span className="badge-react">React</span>
+                <span className="badge-firebase">Firebase</span>
+                <span className="badge-tmdb">TheMovieDB</span>
+                <span className="badge-js">JavaScript</span>
               </div>
+              <div className="project-preview"><img src={netflixPreview} alt="Netflix Clone Preview" /></div>
             </div>
 
-            <div className="card card-with-preview">
-              <a href="https://github.com/yourusername/spotify-dashboard" target="_blank" rel="noopener noreferrer" className="card-title-link">
-                <div className="card-title">Personal Website</div>
-              </a>
-              <div className="card-desc">Personal portfolio website built with React, featuring dark mode, interactive photo collage, Spotify integration, and project showcase.</div>
-              <div className="badges">
-                <span className="badge-react">React</span><span className="badge-spotify">Spotify API</span><span className="badge-js">JavaScript</span><span className="badge-tailwind">Tailwind</span><span className="badge-node">Spotify Web API</span>
+            <div className="project-item">
+              <div className="project-main">
+                <a href="https://github.com/NguyenMinh4869/Personal-site" target="_blank" rel="noopener noreferrer" className="project-link">
+                  <div className="project-name">Personal Website</div>
+                </a>
+                <div className="project-desc">Portfolio site with dark mode, interactive collage, Spotify integration, and project showcase.</div>
               </div>
-              <div className="card-preview">
-                <img src={personalWebsitePreview} alt="Personal Website Preview" />
+              <div className="project-tags badges">
+                <span className="badge-react">React</span>
+                <span className="badge-spotify">Spotify API</span>
+                <span className="badge-js">JavaScript</span>
+                <span className="badge-tailwind">Tailwind</span>
+                <span className="badge-node">Spotify Web API</span>
               </div>
+              <div className="project-preview"><img src={personalWebsitePreview} alt="Personal Website Preview" /></div>
             </div>
           </div>
-        </Section>
+        </div>
 
         <Section title="Timeline">
-          <ul className="timeline">
+          <ul className="timeline stagger-fade">
            
 
             
 
-            <li className="timeline-item">
+            <li className="timeline-item animate-fade-in-up delay-1">
               <div className="timeline-left">
                 <span className="dot dot-red" />
                 <div>
