@@ -6,7 +6,7 @@ import NowPlaying from './NowPlaying';
 const Home = () => {
   const { isDarkMode } = useDarkMode();
   const [displayedText, setDisplayedText] = useState('');
-  const fullText ="hello, I'm Minh";
+  const fullText ="hello, I'm Minh.";
   const [currentIndex, setCurrentIndex] = useState(0);
 
   useEffect(() => {
@@ -28,7 +28,7 @@ const Home = () => {
             {displayedText}
           </h1>
           <p className="hero-description animate-fade-in-up delay-2">
-            For now I really dont know what should I write here so he. he. he.
+          Hello, my name is Minh. I’m currently a university student majoring in Information Technology. I have a strong interest in software development and problem-solving through technology. During my studies, I’ve been learning about programming, databases, and web development, and I enjoy applying my knowledge to real projects.
           </p>
         </div>
         <div style={{ marginTop: '32px' }} className="animate-fade-in-up delay-3">

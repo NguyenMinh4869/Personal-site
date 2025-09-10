@@ -25,31 +25,36 @@ const NowPlaying = () => {
         setLastPlayed(data);
       }
     };
+    
+    // Fetch recently played chỉ 1 lần khi component mount
     const fetchRecent = async () => {
       const items = await getRecentlyPlayed(4);
       setRecent(items);
-      
-      // Nếu chưa có lastPlayed và có recent items, dùng bài đầu tiên
-      if (!lastPlayed && items && items.length > 0) {
-        const firstRecent = items[0];
-        setLastPlayed({
-          title: firstRecent.title,
-          artist: firstRecent.artists,
-          albumImageUrl: firstRecent.albumImageUrl,
-          songUrl: firstRecent.songUrl,
-          isPlaying: false,
-          timePlayed: 0,
-          timeTotal: firstRecent.durationMs
-        });
-      }
     };
+    
     fetchNowPlaying();
     fetchRecent();
     intervalId = setInterval(() => {
       fetchNowPlaying();
     }, 1000);
     return () => clearInterval(intervalId);
-  }, [lastPlayed]);
+  }, []); // Bỏ dependency [lastPlayed] để chỉ chạy 1 lần
+
+  // Xử lý set lastPlayed từ recent items nếu cần
+  useEffect(() => {
+    if (!lastPlayed && recent && recent.length > 0) {
+      const firstRecent = recent[0];
+      setLastPlayed({
+        title: firstRecent.title,
+        artist: firstRecent.artists,
+        albumImageUrl: firstRecent.albumImageUrl,
+        songUrl: firstRecent.songUrl,
+        isPlaying: false,
+        timePlayed: 0,
+        timeTotal: firstRecent.durationMs
+      });
+    }
+  }, [recent, lastPlayed]);
 
   let playerState = '';
   let secondsPlayed = 0, minutesPlayed = 0, secondsTotal = 0, minutesTotal = 0;

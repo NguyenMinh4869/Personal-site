@@ -39,6 +39,7 @@
   overflow: hidden;
   font-family: 'Poppins', sans-serif;
   letter-spacing: 0.5px;
+  text-wrap: balance;
 }
 
 .hero-title::after {
@@ -91,10 +92,16 @@
 
 .hero-description {
   font-size: 1.1rem;
-  line-height: 1.6;
+  line-height: 1.75;
   color: #666666;
-  max-width: 600px;
+  max-width: 720px;
   transition: color 0.2s ease-in-out;
+  text-align: justify;
+  text-justify: inter-word;
+  text-wrap: pretty;
+  word-break: keep-all;
+  hyphens: auto;
+  letter-spacing: 0.1px;
 }
 
 .home-container.dark .hero-description {

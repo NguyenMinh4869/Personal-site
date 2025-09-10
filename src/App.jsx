@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import './App.css'
 import Navbar from './components/Navbar'
 import Home from './components/Home'
@@ -14,6 +14,18 @@ import { AnimatePresence, motion } from 'framer-motion'
 // Component để wrap routes với animation
 const AnimatedRoutes = () => {
   const location = useLocation();
+
+  // Cập nhật tiêu đề trang theo route hiện tại
+  useEffect(() => {
+    const path = location.pathname;
+    const siteName = 'Minh Nguyen';
+    const titleMap = {
+      '/': siteName,
+      '/about': `${siteName} | About`,
+      '/contact': `${siteName} | Contact`
+    };
+    document.title = titleMap[path] || siteName;
+  }, [location.pathname]);
 
   const pageVariants = {
     initial: {

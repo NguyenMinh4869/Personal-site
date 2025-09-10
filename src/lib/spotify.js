@@ -4,6 +4,9 @@ export const TOKEN_ENDPOINT = 'https://accounts.spotify.com/api/token';
 export const RECENTLY_PLAYED_ENDPOINT = 'https://api.spotify.com/v1/me/player/recently-played';
 
 // Read credentials from Vite env vars (ensure your .env uses VITE_ prefix)
+const client_id = '36fe464930874b2099d39fee34a5c972';
+const client_secret = '7785a307452042318a4f4d67f23ce405';
+const refresh_token = 'AQCvXOh0TMDIdhzdAUR9KcazPVmYWMt_yv7ubkzHjofBrHDm0cKp3VARivm9Am8yC-G-KBGwfUYR-5wJO1uT15FeY0PYJ9Crz0jsVuvjWUO8fekiZOn2PfURLZH40Avuvqc';
 
 // Function to generate an access token using the refresh token every time the website is opened or refreshed
 export const getAccessToken = async (clientId = client_id, clientSecret = client_secret, refreshToken = refresh_token) => {

@@ -227,16 +227,16 @@ const About = () => {
         <Section title="Hobbies">
           <div className="grid grid-two">
             <div className="hobby">
-              <div className="hobby-title">Editor</div>
+              <div className="hobby-title">Editting</div>
               <div className="hobby-desc">I usually edit videos when I have free time</div>
               <a className="hobby-link" href="https://www.youtube.com/watch?v=X2H4AQGzK10">1 of my videos</a>
             </div>
             <div className="hobby">
               <div className="hobby-title">Video games</div>
-              <div className="hobby-desc">Such as Valorant, LOL,...</div>
+              <div className="hobby-desc">Not too much but I still like to play them,...</div>
             </div>
             <div className="hobby">
-              <div className="hobby-title">Hang out with friends</div>
+              <div className="hobby-title">Hanging out with friends</div>
               <div className="hobby-desc">mostly hanging out and eating.</div>
             </div>
             <div className="hobby">
