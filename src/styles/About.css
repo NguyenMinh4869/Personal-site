@@ -5,6 +5,8 @@
   transition: background-color 0.2s ease-in-out, color 0.2s ease-in-out;
   padding: 6rem 0 3rem; /* account for fixed navbar */
   font-family: 'Inter', 'Open Sans', 'Poppins', 'Signika', system-ui, Avenir, Helvetica, Arial, sans-serif;
+  position: relative;
+  z-index: 1;
 }
 
 .about-container.dark {
@@ -147,8 +149,19 @@
 .img-4 { left: 520px; top: 20px; transform: rotate(6deg); }
 
 @media (max-width: 900px) {
-  .photo-collage { height: 220px; width: 360px; margin: 16px auto 24px; }
-  .collage-card { width: 200px; height: 140px; }
+  .about-content {
+    padding: 0 1.5rem;
+  }
+  
+  .photo-collage { 
+    height: 220px; 
+    width: 360px; 
+    margin: 16px auto 24px; 
+  }
+  .collage-card { 
+    width: 200px; 
+    height: 140px; 
+  }
   .img-1 { left: 0; top: 40px; }
   .img-2 { left: 110px; top: 10px; }
   .img-3 { left: 220px; top: 0; }
@@ -589,9 +602,81 @@
 .delay-photo-3 { animation-delay: 0.35s; }
 .delay-photo-4 { animation-delay: 0.50s; }
 
-@media (max-width: 900px) {
-  .grid { grid-template-columns: 1fr; }
-  .grid-two { grid-template-columns: 1fr; }
+@media (max-width: 768px) {
+  .about-container {
+    padding: 5rem 0 2rem;
+  }
+  
+  .about-content {
+    padding: 0 1rem;
+  }
+  
+  .about-title {
+    font-size: 1.3rem;
+    display: block;
+    margin-bottom: 0.5rem;
+  }
+  
+  .about-subtitle {
+    font-size: 0.9rem;
+    display: block;
+  }
+  
+  .photo-collage {
+    height: 180px;
+    width: 280px;
+    margin: 12px auto 20px;
+    display: block;
+  }
+  
+  .collage-card {
+    width: 160px;
+    height: 120px;
+  }
+  
+  .img-1 { left: 0; top: 30px; }
+  .img-2 { left: 80px; top: 5px; }
+  .img-3 { left: 160px; top: 0; }
+  .img-4 { left: 240px; top: 15px; }
+  
+  .project-preview {
+    position: static;
+    transform: none;
+    opacity: 1;
+    visibility: visible;
+    margin-top: 12px;
+    width: 100%;
+  }
+  
+  .project-preview img {
+    width: 100%;
+    height: auto;
+    max-width: 300px;
+    margin: 0 auto;
+    display: block;
+  }
+  
+  .about-header {
+    margin-bottom: 2rem;
+    margin-top: 1rem;
+  }
+  
+  .about-title {
+    font-size: 1.4rem;
+    margin-bottom: 0.5rem;
+  }
+  
+  .about-subtitle {
+    font-size: 0.95rem;
+  }
+  
+  .grid { 
+    grid-template-columns: 1fr; 
+    gap: 8px;
+  }
+  .grid-two { 
+    grid-template-columns: 1fr; 
+  }
   
   .project-item {
     flex-direction: column;
@@ -602,10 +687,47 @@
     margin-top: 12px;
     justify-self: start;
     justify-items: start;
+    grid-template-columns: repeat(2, max-content);
+  }
+  
+  .hobby {
+    padding: 6px 0;
+  }
+  
+  .hobby-title {
+    font-size: 0.95rem;
+  }
+  
+  .hobby-desc {
+    font-size: 0.88rem;
   }
 }
 
 @media (max-width: 640px) {
+  .about-container {
+    padding: 4.5rem 0 2rem;
+  }
+  
+  .about-content {
+    padding: 0 0.8rem;
+  }
+  
+  .photo-collage {
+    height: 150px;
+    width: 240px;
+    margin: 10px auto 16px;
+  }
+  
+  .collage-card {
+    width: 140px;
+    height: 100px;
+  }
+  
+  .img-1 { left: 0; top: 25px; }
+  .img-2 { left: 70px; top: 5px; }
+  .img-3 { left: 140px; top: 0; }
+  .img-4 { left: 210px; top: 10px; }
+  
   .timeline-item {
     flex-direction: column;
     align-items: flex-start;
@@ -618,5 +740,91 @@
   .timeline-right {
     margin-left: 26px;
     margin-top: 0;
+  }
+  
+  .project-tags {
+    grid-template-columns: 1fr;
+    gap: 6px;
+  }
+  
+  .project-preview {
+    position: static;
+    transform: none;
+    opacity: 1;
+    visibility: visible;
+    margin-top: 10px;
+    width: 100%;
+  }
+  
+  .project-preview img {
+    width: 100%;
+    height: auto;
+    max-width: 250px;
+    margin: 0 auto;
+    display: block;
+  }
+}
+
+@media (max-width: 480px) {
+  .about-container {
+    padding: 4rem 0 1.5rem;
+  }
+  
+  .about-content {
+    padding: 0 0.6rem;
+  }
+  
+  .about-title {
+    font-size: 1.2rem;
+  }
+  
+  .about-subtitle {
+    font-size: 0.85rem;
+  }
+  
+  .photo-collage {
+    height: 120px;
+    width: 200px;
+    margin: 8px auto 12px;
+  }
+  
+  .collage-card {
+    width: 120px;
+    height: 80px;
+  }
+  
+  .img-1 { left: 0; top: 20px; }
+  .img-2 { left: 60px; top: 5px; }
+  .img-3 { left: 120px; top: 0; }
+  .img-4 { left: 180px; top: 8px; }
+  
+  .about-section-title {
+    font-size: 1.1rem;
+    margin-bottom: 1rem;
+  }
+  
+  .project-name {
+    font-size: 0.95rem;
+  }
+  
+  .project-desc {
+    font-size: 0.9rem;
+  }
+  
+  .project-preview {
+    position: static;
+    transform: none;
+    opacity: 1;
+    visibility: visible;
+    margin-top: 8px;
+    width: 100%;
+  }
+  
+  .project-preview img {
+    width: 100%;
+    height: auto;
+    max-width: 200px;
+    margin: 0 auto;
+    display: block;
   }
 }

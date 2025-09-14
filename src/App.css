@@ -15,6 +15,7 @@ body {
   color: #333333;
   transition: background-color 0.2s ease-in-out, color 0.2s ease-in-out;
   padding-top: 80px; /* Space for fixed navbar */
+  overflow-x: hidden; /* Prevent horizontal scroll */
 }
 
 /* Dark mode styles */
@@ -38,7 +39,7 @@ body.dark {
   color: inherit;
   transition: background-color 0.2s ease-in-out, color 0.2s ease-in-out;
   position: relative;
-  overflow: hidden;
+  overflow-x: hidden; /* Prevent horizontal scroll */
 }
 
 /* Page wrapper for animations */
@@ -140,4 +141,25 @@ body.dark {
 body {
   margin: 0 !important;
   padding: 0 !important;
+}
+
+/* Mobile responsive adjustments */
+@media (max-width: 768px) {
+  body {
+    padding-top: 80px; /* Adequate space for mobile navbar */
+  }
+  
+  .main-content {
+    min-height: calc(100vh - 80px);
+  }
+}
+
+@media (max-width: 480px) {
+  body {
+    padding-top: 75px; /* Adequate space for small mobile navbar */
+  }
+  
+  .main-content {
+    min-height: calc(100vh - 75px);
+  }
 }

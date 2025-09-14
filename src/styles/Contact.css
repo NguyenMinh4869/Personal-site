@@ -49,8 +49,111 @@
   gap: 16px;
 }
 
-@media (max-width: 720px) {
-  .contact-grid { grid-template-columns: 1fr; }
+/* Responsive Design */
+@media (max-width: 768px) {
+  .contact-container {
+    padding: 0;
+  }
+  
+  .contact-content {
+    padding: 32px 16px 60px;
+  }
+  
+  .contact-title {
+    font-size: 32px;
+    padding-top: 60px;
+  }
+  
+  .contact-subtitle {
+    font-size: 16px;
+  }
+  
+  .contact-helper {
+    font-size: 13px;
+  }
+  
+  .contact-grid { 
+    grid-template-columns: 1fr; 
+    gap: 12px;
+  }
+  
+  .contact-card-inner {
+    padding: 16px;
+    gap: 12px;
+  }
+  
+  .contact-card-icon {
+    width: 32px;
+    height: 32px;
+  }
+  
+  .contact-card-title {
+    font-size: 15px;
+  }
+  
+  .contact-card-subtitle {
+    font-size: 12px;
+  }
+}
+
+@media (max-width: 480px) {
+  .contact-content {
+    padding: 24px 12px 40px;
+  }
+  
+  .contact-title {
+    font-size: 28px;
+    padding-top: 50px;
+  }
+  
+  .contact-subtitle {
+    font-size: 15px;
+  }
+  
+  .contact-helper {
+    font-size: 12px;
+  }
+  
+  .contact-grid {
+    gap: 10px;
+  }
+  
+  .contact-card-inner {
+    padding: 14px;
+    gap: 10px;
+  }
+  
+  .contact-card-icon {
+    width: 30px;
+    height: 30px;
+  }
+  
+  .contact-card-title {
+    font-size: 14px;
+  }
+  
+  .contact-card-subtitle {
+    font-size: 11px;
+  }
+}
+
+@media (max-width: 360px) {
+  .contact-content {
+    padding: 20px 8px 30px;
+  }
+  
+  .contact-title {
+    font-size: 24px;
+    padding-top: 40px;
+  }
+  
+  .contact-subtitle {
+    font-size: 14px;
+  }
+  
+  .contact-helper {
+    font-size: 11px;
+  }
 }
 
 .contact-card {

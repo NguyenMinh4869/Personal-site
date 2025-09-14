@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import '../styles/Navbar.css';
 import { useDarkMode } from '../contexts/DarkModeContext';
 import { NavLink, useLocation, Link } from 'react-router-dom';
@@ -8,6 +8,7 @@ import avatarImg from '../assets/avatar.jpg';
 const Navbar = () => {
   const { isDarkMode, toggleDarkMode } = useDarkMode();
   const location = useLocation();
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
   // Định nghĩa các route và vị trí của chúng
   const navItems = [
@@ -21,6 +22,14 @@ const Navbar = () => {
     return navItems.findIndex(item => item.path === location.pathname);
   };
 
+  const toggleMobileMenu = () => {
+    setIsMobileMenuOpen(!isMobileMenuOpen);
+  };
+
+  const closeMobileMenu = () => {
+    setIsMobileMenuOpen(false);
+  };
+
   return (
     <div className={`navbar-container ${isDarkMode ? 'dark' : ''}`}>
       {/* Top thin black line */}
@@ -31,7 +40,7 @@ const Navbar = () => {
         <div className="navbar-content">
           {/* Left side - Profile image */}
           <div className="navbar-left">
-            <Link to="/" className="profile-link" aria-label="Go to home">
+            <Link to="/" className="profile-link" aria-label="Go to home" onClick={closeMobileMenu}>
               <div className="profile-image">
                 <img 
                   src={avatarImg} 
@@ -41,8 +50,8 @@ const Navbar = () => {
             </Link>
           </div>
           
-          {/* Center - Navigation links */}
-          <div className="navbar-center">
+          {/* Center - Navigation links (Desktop) */}
+          <div className="navbar-center desktop-nav">
             <div className="nav-links-container">
               <ul className="nav-links">
                 {navItems.map((item, index) => (
@@ -82,7 +91,7 @@ const Navbar = () => {
             </div>
           </div>
           
-          {/* Right side - Dark mode toggle */}
+          {/* Right side - Dark mode toggle and mobile menu button */}
           <div className="navbar-right">
             <button className="dark-mode-toggle" onClick={toggleDarkMode}>
               {isDarkMode ? (
@@ -95,7 +104,40 @@ const Navbar = () => {
                 </svg>
               )}
             </button>
+            
+            {/* Mobile menu button */}
+            <button className="mobile-menu-toggle" onClick={toggleMobileMenu} aria-label="Toggle menu">
+              <div className={`hamburger ${isMobileMenuOpen ? 'active' : ''}`}>
+                <span></span>
+                <span></span>
+                <span></span>
+              </div>
+            </button>
           </div>
+        </div>
+        
+        {/* Mobile Navigation Menu */}
+        <div className={`mobile-nav ${isMobileMenuOpen ? 'active' : ''}`}>
+          <ul className="mobile-nav-links">
+            {navItems.map((item) => (
+              <li key={item.path}>
+                {item.path.startsWith('#') ? (
+                  <a href={item.path} className="mobile-nav-link" onClick={closeMobileMenu}>
+                    {item.label}
+                  </a>
+                ) : (
+                  <NavLink 
+                    to={item.path} 
+                    end 
+                    className={({ isActive }) => `mobile-nav-link ${isActive ? 'active' : ''}`}
+                    onClick={closeMobileMenu}
+                  >
+                    {item.label}
+                  </NavLink>
+                )}
+              </li>
+            ))}
+          </ul>
         </div>
       </nav>
     </div>
