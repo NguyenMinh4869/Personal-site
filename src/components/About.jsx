@@ -8,6 +8,7 @@ import img4 from '../assets/anh4.jpg';
 import movieTheaterPreview from '../assets/movie theater.png';
 import netflixPreview from '../assets/net-flix.png';
 import personalWebsitePreview from '../assets/personal site.png';
+import toyStoryPreview from '../assets/toy-story.png';
 
 const Section = ({ title, children }) => (
   <section className="about-section">
@@ -18,17 +19,32 @@ const Section = ({ title, children }) => (
   </section>
 );
 
-const DraggableCard = ({ className, rotationDeg, children }) => {
-  const [delta, setDelta] = useState({ x: 0, y: 0 });
-  const [dragging, setDragging] = useState(false);
+const DraggableCard = ({ className, rotationDeg, delayClass, children }) => {
+  const cardRef = useRef(null);
+  const posRef = useRef({ x: 0, y: 0 });
   const startRef = useRef({ x: 0, y: 0 });
+  const [isDragging, setIsDragging] = useState(false);
 
   const onPointerDown = (e) => {
-    setDragging(true);
+    // Prevent default ghost image dragging
+    if (e.type === 'mousedown') {
+      e.preventDefault();
+    }
+    
+    // Bring clicked card to front
+    const allCards = document.querySelectorAll('.collage-card');
+    allCards.forEach(c => c.style.zIndex = '1');
+    if (cardRef.current) {
+      cardRef.current.style.zIndex = '50';
+      // Smooth scale up effect when picked
+      cardRef.current.style.transition = 'transform 0.2s cubic-bezier(0.2, 0.8, 0.2, 1)';
+      cardRef.current.style.transform = `translate(${posRef.current.x}px, ${posRef.current.y}px) rotate(${rotationDeg}deg) scale(1.05)`;
+    }
+    
+    setIsDragging(true);
     const point = 'touches' in e ? e.touches[0] : e;
-    startRef.current = { x: point.clientX - delta.x, y: point.clientY - delta.y };
-    // Disable transition while dragging for immediate response
-    e.currentTarget.style.transition = 'none';
+    startRef.current = { x: point.clientX - posRef.current.x, y: point.clientY - posRef.current.y };
+    
     window.addEventListener('mousemove', onPointerMove);
     window.addEventListener('touchmove', onPointerMove, { passive: false });
     window.addEventListener('mouseup', onPointerUp);
@@ -37,31 +53,43 @@ const DraggableCard = ({ className, rotationDeg, children }) => {
 
   const onPointerMove = (e) => {
     const point = 'touches' in e ? e.touches[0] : e;
-    if ('touches' in e) e.preventDefault();
-    setDelta({ x: point.clientX - startRef.current.x, y: point.clientY - startRef.current.y });
+    if ('touches' in e && e.cancelable) e.preventDefault();
+    
+    const newX = point.clientX - startRef.current.x;
+    const newY = point.clientY - startRef.current.y;
+    posRef.current = { x: newX, y: newY };
+    
+    if (cardRef.current) {
+      cardRef.current.style.transition = 'none'; 
+      cardRef.current.style.transform = `translate(${newX}px, ${newY}px) rotate(${rotationDeg}deg) scale(1.05)`;
+    }
   };
 
   const onPointerUp = () => {
-    setDragging(false);
-    // Re-enable transition for smooth return
-    const card = document.querySelector(`.${className.split(' ')[0]}`);
-    if (card) card.style.transition = 'transform 0.3s cubic-bezier(0.4, 0, 0.2, 1)';
+    setIsDragging(false);
+    if (cardRef.current) {
+      cardRef.current.style.transition = 'transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275)';
+      cardRef.current.style.transform = `translate(${posRef.current.x}px, ${posRef.current.y}px) rotate(${rotationDeg}deg) scale(1)`;
+    }
     window.removeEventListener('mousemove', onPointerMove);
     window.removeEventListener('touchmove', onPointerMove);
     window.removeEventListener('mouseup', onPointerUp);
     window.removeEventListener('touchend', onPointerUp);
   };
 
-  const transform = `translate(${delta.x}px, ${delta.y}px) rotate(${rotationDeg}deg)`;
+  const initialTransform = `translate(${posRef.current.x}px, ${posRef.current.y}px) rotate(${rotationDeg}deg)`;
 
   return (
     <div
-      className={`${className} ${dragging ? 'dragging' : ''}`}
-      style={{ transform }}
+      ref={cardRef}
+      className={`${className} ${isDragging ? 'dragging' : ''}`}
+      style={{ transform: initialTransform }}
       onMouseDown={onPointerDown}
       onTouchStart={onPointerDown}
     >
-      {children}
+      <div className={`enter-wrapper ${delayClass || ''}`}>
+        {children}
+      </div>
     </div>
   );
 };
@@ -87,7 +115,7 @@ const About = () => {
 
         {/* Photo collage */}
         <div className="photo-collage">
-          <DraggableCard className="collage-card img-1" rotationDeg={-6}>
+          <DraggableCard className="collage-card img-1" delayClass="delay-photo-1" rotationDeg={-6}>
             <div className="flip">
               <div className="front">
                 <img src={img1} alt="memory-1" />
@@ -102,7 +130,7 @@ const About = () => {
             </div>
           </DraggableCard>
 
-          <DraggableCard className="collage-card img-2" rotationDeg={-2}>
+          <DraggableCard className="collage-card img-2" delayClass="delay-photo-2" rotationDeg={-2}>
             <div className="flip">
               <div className="front">
                 <img src={img2} alt="memory-2" />
@@ -117,7 +145,7 @@ const About = () => {
             </div>
           </DraggableCard>
 
-          <DraggableCard className="collage-card img-3" rotationDeg={4}>
+          <DraggableCard className="collage-card img-3" delayClass="delay-photo-3" rotationDeg={4}>
             <div className="flip">
               <div className="front">
                 <img src={img3} alt="memory-3" />
@@ -132,7 +160,7 @@ const About = () => {
             </div>
           </DraggableCard>
 
-          <DraggableCard className="collage-card img-4" rotationDeg={6}>
+          <DraggableCard className="collage-card img-4" delayClass="delay-photo-4" rotationDeg={6}>
             <div className="flip">
               <div className="front">
                 <img src={img4} alt="memory-4" />
@@ -148,7 +176,7 @@ const About = () => {
           </DraggableCard>
         </div>
 
-       
+
         <div className="about-section section-aside-grid stagger-fade">
           <h2 className="about-section-title">Projects</h2>
           <div className="project-list">
@@ -196,18 +224,33 @@ const About = () => {
                 <span className="badge-spotify">Spotify API</span>
                 <span className="badge-js">JavaScript</span>
                 <span className="badge-tailwind">Tailwind</span>
-                <span className="badge-node">Spotify Web API</span>
+
               </div>
               <div className="project-preview"><img src={personalWebsitePreview} alt="Personal Website Preview" /></div>
+            </div>
+
+            <div className="project-item">
+              <div className="project-main">
+                <a href="https://github.com/NguyenMinh4869/toy-story-fe" target="_blank" rel="noopener noreferrer" className="project-link">
+                  <div className="project-name">Toy Story</div>
+                </a>
+                <div className="project-desc">A modern, high-performance e-commerce frontend built with React and TypeScript. This repository contains the source code for the Toy Story online store, featuring a sleek design and seamless user experience.</div>
+              </div>
+              <div className="project-tags badges">
+                <span className="badge-react">React</span>
+                <span className="badge-typescript">TypeScript</span>
+                <span className="badge-js">JavaScript</span>
+              </div>
+              <div className="project-preview"><img src={toyStoryPreview} alt="Toy Story Preview" /></div>
             </div>
           </div>
         </div>
 
         <Section title="Timeline">
           <ul className="timeline stagger-fade">
-           
 
-            
+
+
 
             <li className="timeline-item animate-fade-in-up delay-1">
               <div className="timeline-left">
@@ -215,7 +258,7 @@ const About = () => {
                 <div>
                   <div className="item-title">FPT Software</div>
                   <div className="item-subtitle">Software Development Engineer Intern</div>
-                 
+
                 </div>
               </div>
               <div className="timeline-right">05/2025 - 08/2025</div>

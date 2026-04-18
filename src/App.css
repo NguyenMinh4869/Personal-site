@@ -20,7 +20,7 @@ body {
 
 /* Dark mode styles */
 body.dark {
-  background-color: #1a1a1a;
+  background-color: #000000;
   color: #ffffff;
 }
 
@@ -117,11 +117,11 @@ body {
 
 /* Dark mode cho toàn bộ document */
 html.dark {
-  background-color: #1a1a1a;
+  background-color: #000000;
 }
 
 body.dark {
-  background-color: #1a1a1a;
+  background-color: #000000;
   color: #ffffff;
 }
 

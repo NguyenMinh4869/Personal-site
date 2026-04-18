@@ -14,6 +14,7 @@ const Navbar = () => {
   const navItems = [
     { path: '/', label: 'Home' },
     { path: '/about', label: 'About' },
+    { path: '/gear', label: 'Gear' },
     { path: '/contact', label: 'Contact' }
   ];
 
@@ -79,8 +80,8 @@ const Navbar = () => {
                 layoutId="nav-indicator"
                 initial={false}
                 animate={{
-                  x: getCurrentIndex() * (120 + 16), // 120px width + 16px gap
-                  width: 120
+                  x: getCurrentIndex() * (90 + 16), // 90px width + 16px gap
+                  width: 90
                 }}
                 transition={{
                   type: "spring",

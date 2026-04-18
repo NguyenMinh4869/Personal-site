@@ -7,6 +7,7 @@ import Footer from './components/Footer'
 import About from './components/About'
 import { BrowserRouter, Routes, Route, useLocation } from 'react-router-dom'
 import Contact from './components/Contact'
+import Gear from './components/Gear'
 import { AnimatePresence, motion } from 'framer-motion'
 
 
@@ -65,6 +66,7 @@ const AnimatedRoutes = () => {
         <Routes location={location}>
           <Route path="/" element={<Home />} />
           <Route path="/about" element={<About />} />
+          <Route path="/gear" element={<Gear />} />
           <Route path="/contact" element={<Contact />} />
           
         </Routes>
