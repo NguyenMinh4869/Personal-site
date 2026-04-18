@@ -1,275 +1,224 @@
-import React, { useEffect, useState } from 'react';
-import { AiOutlinePauseCircle, AiFillPlayCircle } from 'react-icons/ai';
-import { BiErrorCircle } from 'react-icons/bi';
-import { HiOutlineStatusOffline } from 'react-icons/hi';
-import { BsThreeDots } from 'react-icons/bs';
-import { FaSpotify } from 'react-icons/fa';
-import { getNowPlaying, getRecentlyPlayed } from '../lib/spotify';
+import React, { useState, useEffect, useRef } from 'react';
+import { motion, AnimatePresence } from 'framer-motion';
+import { useDarkMode } from '../contexts/DarkModeContext';
+import { getNowPlaying, getRecentlyPlayed, getTopTracks } from '../lib/spotify';
 import '../styles/NowPlaying.css';
 
+// ------------------------------------------------------------------
+// Helper Component: Spotify Embed (Replacing react-spotify-embed)
+// ------------------------------------------------------------------
+const SpotifyEmbed = ({ url, wide, className = "" }) => {
+  if (!url) return null;
+  const id = url.split('/track/')[1]?.split('?')[0];
+  if (!id) return null;
+  
+  // Theme parameter can be added (theme=0 is dark, theme=1 is light usually, but Spotify auto-detects based on system/embed context or we just let it be default)
+  const src = `https://open.spotify.com/embed/track/${id}?utm_source=generator`;
+  
+  return (
+    <div className={`spotify-embed-container ${className}`}>
+      <iframe
+        src={src}
+        width="100%"
+        height={wide ? "80" : "352"}
+        frameBorder="0"
+        allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture"
+        loading="lazy"
+        style={{ borderRadius: '12px' }}
+      />
+    </div>
+  );
+};
+
+// ------------------------------------------------------------------
+// Main Component
+// ------------------------------------------------------------------
 const NowPlaying = () => {
-  const [nowPlaying, setNowPlaying] = useState(null);
-  const [recent, setRecent] = useState([]);
-  const [featureBg, setFeatureBg] = useState('linear-gradient(145deg, #4338ca 0%, #312e81 100%)');
-  const [recentBgs, setRecentBgs] = useState([]);
-  const [lastPlayed, setLastPlayed] = useState(null);
+  const { isDarkMode } = useDarkMode();
+  const [activeList, setActiveList] = useState('recent'); // 'recent' | 'top'
+  
+  const [currentTrack, setCurrentTrack] = useState(null);
+  const [recentTracks, setRecentTracks] = useState([]);
+  const [topTracks, setTopTracks] = useState([]);
+  
+  const [displayTrack, setDisplayTrack] = useState(null);
+  const [tracksList, setTracksList] = useState([]);
+  
+  const tracksRef = useRef(null);
 
   useEffect(() => {
     let intervalId;
+    
     const fetchNowPlaying = async () => {
       const data = await getNowPlaying();
-      setNowPlaying(data);
-      
-      // Nếu có nhạc đang phát, lưu làm bài cuối cùng
       if (data && data.title && data.title !== 'User is' && data.title !== 'Failed to') {
-        setLastPlayed(data);
+        setCurrentTrack({
+          id: data.title, // Use title as fallback ID
+          songUrl: data.songUrl,
+          albumImageUrl: data.albumImageUrl,
+          title: data.title,
+          artists: data.artist
+        });
+      } else {
+        setCurrentTrack(null);
       }
     };
     
-    // Fetch recently played chỉ 1 lần khi component mount
-    const fetchRecent = async () => {
-      const items = await getRecentlyPlayed(4);
-      setRecent(items);
+    const fetchLists = async () => {
+      // Fetch 5 to ensure we have 4 to show even if current track is excluded (logic can be expanded)
+      const recent = await getRecentlyPlayed(5);
+      setRecentTracks(recent);
+      
+      const top = await getTopTracks(5);
+      setTopTracks(top);
     };
-    
+
     fetchNowPlaying();
-    fetchRecent();
+    fetchLists();
+    
+    // Poll Now Playing status every 10 seconds
     intervalId = setInterval(() => {
       fetchNowPlaying();
-    }, 1000);
+    }, 10000); 
+    
     return () => clearInterval(intervalId);
-  }, []); // Bỏ dependency [lastPlayed] để chỉ chạy 1 lần
+  }, []);
 
-  // Xử lý set lastPlayed từ recent items nếu cần
+  // Update Displayed Info whenever List Type or Data changes
   useEffect(() => {
-    if (!lastPlayed && recent && recent.length > 0) {
-      const firstRecent = recent[0];
-      setLastPlayed({
-        title: firstRecent.title,
-        artist: firstRecent.artists,
-        albumImageUrl: firstRecent.albumImageUrl,
-        songUrl: firstRecent.songUrl,
-        isPlaying: false,
-        timePlayed: 0,
-        timeTotal: firstRecent.durationMs
-      });
-    }
-  }, [recent, lastPlayed]);
-
-  let playerState = '';
-  let secondsPlayed = 0, minutesPlayed = 0, secondsTotal = 0, minutesTotal = 0;
-  let albumImageUrl = '/images/albumCover.png';
-  let title = '';
-  let artist = '';
-  let displayData = null;
-
-  // Ưu tiên hiển thị nhạc đang phát, nếu không có thì hiển thị bài cuối cùng
-  if (nowPlaying != null && nowPlaying.title && nowPlaying.title !== 'User is' && nowPlaying.title !== 'Failed to') {
-    displayData = nowPlaying;
-  } else if (lastPlayed) {
-    displayData = lastPlayed;
-  }
-
-  if (displayData) {
-    playerState = displayData.isPlaying ? 'PLAY' : 'PAUSE';
-    secondsPlayed = Math.floor(displayData.timePlayed / 1000);
-    minutesPlayed = Math.floor(secondsPlayed / 60);
-    secondsPlayed = secondsPlayed % 60;
-    secondsTotal = Math.floor(displayData.timeTotal / 1000);
-    minutesTotal = Math.floor(secondsTotal / 60);
-    secondsTotal = secondsTotal % 60;
-    albumImageUrl = displayData.albumImageUrl;
-    title = displayData.title;
-    artist = displayData.artist;
-  } else if (nowPlaying === 'Currently Not Playing') {
-    playerState = 'OFFLINE';
-    title = 'User is';
-    artist = 'currently Offline';
-  } else if (typeof nowPlaying === 'string') {
-    title = 'Failed to';
-    artist = 'fetch song';
-  }
-
-  const pad = (n) => {
-    return n < 10 ? `0${n}` : n;
-  };
-
-  const toEmbedUrl = (url) => {
-    if (!url) return '';
-    const id = url.split('/track/')[1]?.split('?')[0];
-    return id ? `https://open.spotify.com/embed/track/${id}` : url;
-  };
-
-  const href = playerState === 'PLAY' || playerState === 'PAUSE' ? toEmbedUrl(displayData?.songUrl) : '';
-
-  // Compute dominant/average color from album image to drive background
-  // Helpers to compute gradient from image
-  const getAverageColorFromImage = (url) => new Promise((resolve) => {
-    const img = new Image();
-    img.crossOrigin = 'anonymous';
-    img.src = url;
-    img.onload = () => {
-      try {
-        const canvas = document.createElement('canvas');
-        const context = canvas.getContext('2d');
-        const width = 50;
-        const height = 50;
-        canvas.width = width;
-        canvas.height = height;
-        context.drawImage(img, 0, 0, width, height);
-        const { data } = context.getImageData(0, 0, width, height);
-        let r = 0, g = 0, b = 0, count = 0;
-        for (let i = 0; i < data.length; i += 4) {
-          r += data[i];
-          g += data[i + 1];
-          b += data[i + 2];
-          count++;
-        }
-        r = Math.round(r / count);
-        g = Math.round(g / count);
-        b = Math.round(b / count);
-        resolve({ r, g, b });
-      } catch {
-        resolve({ r: 67, g: 56, b: 202 });
+    if (currentTrack) {
+      setDisplayTrack(currentTrack);
+      if (activeList === 'top') {
+        setTracksList(topTracks.slice(0, 4));
+      } else {
+        setTracksList(recentTracks.slice(0, 4));
       }
-    };
-    img.onerror = () => resolve({ r: 67, g: 56, b: 202 });
-  });
+    } else {
+      if (activeList === 'top' && topTracks.length > 0) {
+        setDisplayTrack(topTracks[0]);
+        setTracksList(topTracks.slice(1, 5));
+      } else if (recentTracks.length > 0) {
+        setDisplayTrack(recentTracks[0]);
+        setTracksList(recentTracks.slice(1, 5));
+      } else {
+        // Fallback clear
+        setDisplayTrack(null);
+        setTracksList([]);
+      }
+    }
+  }, [activeList, currentTrack, recentTracks, topTracks]);
 
-  const darken = (c, factor = 0.7) => ({
-    r: Math.max(0, Math.floor(c.r * factor)),
-    g: Math.max(0, Math.floor(c.g * factor)),
-    b: Math.max(0, Math.floor(c.b * factor)),
-  });
-
-  const toGradient = (c) => {
-    const d = darken(c, 0.55);
-    const start = `rgb(${c.r}, ${c.g}, ${c.b})`;
-    const end = `rgb(${d.r}, ${d.g}, ${d.b})`;
-    return `linear-gradient(135deg, ${start} 0%, ${end} 100%)`;
+  const handleTabClick = (type) => {
+    setActiveList(type);
+    
+    if (tracksRef.current) {
+      const rect = tracksRef.current.getBoundingClientRect();
+      const isFullyVisible = (rect.top >= 0 && rect.bottom <= window.innerHeight);
+      
+      if (!isFullyVisible) {
+        tracksRef.current.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+      }
+    }
   };
-
-  // Update feature background when album image changes
-  useEffect(() => {
-    if (!albumImageUrl) return;
-    (async () => {
-      const avg = await getAverageColorFromImage(albumImageUrl);
-      setFeatureBg(toGradient(avg));
-    })();
-  }, [albumImageUrl]);
-
-  // Compute backgrounds for recent items
-  useEffect(() => {
-    if (!recent || recent.length === 0) return;
-    (async () => {
-      const colors = await Promise.all(
-        recent.map((t) => getAverageColorFromImage(t.albumImageUrl))
-      );
-      const grads = colors.map((c) => toGradient(c));
-      setRecentBgs(grads);
-    })();
-  }, [recent]);
-
-  // Optional: set to true để dùng Spotify Embed thay thẻ custom
-  const useEmbed = false;
-  const useEmbedBackground = true; // dùng nền từ iframe embed thật
-  const showFullEmbed = true; // hiển thị toàn bộ giao diện embed cột trái
-  const showFullEmbedRight = true; // hiển thị embed cho danh sách cột phải
 
   return (
-    <div className="np-container">
-      <div className="np-header">
-        <div className="np-title">Recently Played</div>
+    <div className={`sp-container ${isDarkMode ? 'dark' : ''}`}>
+      {/* Header */}
+      <div className={`sp-header ${displayTrack ? 'hide-mobile' : ''}`}>
+        <h2 className="sp-title">
+          {currentTrack ? 'Now Playing' : (activeList === 'top' ? '#1 Track This Month' : 'Recently Played')}
+        </h2>
+        
+        <div className="sp-tabs">
+          <button
+            onClick={() => handleTabClick('recent')}
+            className={`sp-tab-btn ${activeList === 'recent' ? 'active' : ''}`}
+          >
+            Recently Played
+          </button>
+          <button
+            onClick={() => handleTabClick('top')}
+            className={`sp-tab-btn ${activeList === 'top' ? 'active' : ''}`}
+          >
+            Top Tracks
+          </button>
+        </div>
       </div>
-      <div className="np-grid">
-        {showFullEmbed && href ? (
-          <div className="np-embed-full fade-in">
-            <iframe
-              title="spotify-embed-full"
-              src={href}
-              width="100%"
-              height="420"
-              frameBorder="0"
-              allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture"
-              loading="lazy"
-            />
+
+      <div className="sp-content">
+        {/* Main Track Display (Left Column) */}
+        <div className="sp-main">
+          {/* Mobile Title */}
+          <div className="sp-mobile-title">
+            <h2 className="sp-title">
+              {currentTrack ? 'Now Playing' : (activeList === 'top' ? '#1 Track This Month' : 'Recently Played')}
+            </h2>
           </div>
-        ) : (
-        <a className="np-feature-link" href={href} style={{ textDecoration: 'none' }}>
-          <div className="nowPlayingCard np-feature fade-in" style={{ background: useEmbedBackground ? 'transparent' : featureBg }}>
-            {useEmbedBackground ? (
-              <div className="np-embed-bg-iframe" aria-hidden>
-                {href && (
-                  <iframe
-                    title="spotify-embed-bg"
-                    src={`${href}?utm_source=bg`}
-                    width="100%"
-                    height="100%"
-                    frameBorder="0"
-                    allow="encrypted-media"
-                  />
-                )}
-              </div>
-            ) : (
-              <div
-                className="np-embed-bg"
-                aria-hidden
-                style={{ backgroundImage: `url(${albumImageUrl})` }}
-              />
-            )}
-          </div>
-        </a>
-        )}
-        {useEmbed && href && (
-          <div style={{ gridColumn: '1 / span 1' }} className="fade-in">
-            <iframe
-              style={{ borderRadius: '12px', border: 'none' }}
-              src={href}
-              width="100%"
-              height="400"
-              frameBorder="0"
-              allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture"
-              loading="lazy"
-            />
-          </div>
-        )}
-        {recent && recent.length > 0 && (
-          <div className="np-list">
-            {recent.slice(0, 4).map((t, idx) => (
-              showFullEmbedRight ? (
-                <div key={`${t.id}-${idx}`} className="np-embed-item fade-in">
-                  <iframe
-                    title={`spotify-embed-item-${idx}`}
-                    src={toEmbedUrl(t.songUrl)}
-                    width="100%"
-                    height="100%"
-                    frameBorder="0"
-                    allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture"
-                    loading="lazy"
-                  />
-                </div>
-              ) : (
-                <a key={`${t.id}-${idx}`} href={toEmbedUrl(t.songUrl)} style={{ textDecoration: 'none' }}>
-                  <div className="nowPlayingCard np-item fade-in" style={{ background: recentBgs[idx] }}>
-                    <div className="nowPlayingImage">
-                      <img src={t.albumImageUrl} alt="Album" />
-                    </div>
-                    <div id="nowPlayingDetails">
-                      <div className="nowPlayingTitle">{t.title}</div>
-                      <div className="nowPlayingArtist">{t.artists}</div>
-                      <div className="nowPlayingTime">{Math.floor(t.durationMs/60000).toString().padStart(2,'0')}:{Math.floor((t.durationMs%60000)/1000).toString().padStart(2,'0')}</div>
-                    </div>
+          
+          <AnimatePresence mode="sync">
+            {displayTrack && (
+              <motion.div
+                key={displayTrack.songUrl} // Re-animate when the main song changes
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                exit={{ opacity: 0 }}
+                transition={{ duration: 0.3 }}
+                className="sp-main-player"
+              >
+                {/* Mobile version uses wide embed, Desktop uses tall embed */}
+                <SpotifyEmbed wide={true} url={displayTrack.songUrl} className="sp-embed-mobile" />
+                <SpotifyEmbed wide={false} url={displayTrack.songUrl} className="sp-embed-desktop" />
+
+                {/* Mobile Tabs in main display when a song plays */}
+                <div className="sp-mobile-tabs">
+                  <div className="sp-tabs">
+                    <button
+                      onClick={() => handleTabClick('recent')}
+                      className={`sp-tab-btn ${activeList === 'recent' ? 'active' : ''}`}
+                    >
+                      Recently Played
+                    </button>
+                    <button
+                      onClick={() => handleTabClick('top')}
+                      className={`sp-tab-btn ${activeList === 'top' ? 'active' : ''}`}
+                    >
+                      Top Tracks
+                    </button>
                   </div>
-                </a>
-              )
-            ))}
-          </div>
-        )}
+                </div>
+              </motion.div>
+            )}
+          </AnimatePresence>
+        </div>
+
+        {/* Tracks List (Right Column) */}
+        <div ref={tracksRef} className="sp-list">
+          <AnimatePresence mode="wait">
+            <motion.div
+              key={activeList} // Re-animate entire list when switching tabs
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: -20 }}
+              transition={{ duration: 0.2 }}
+            >
+              <div className="sp-list-grid">
+                {tracksList.map((track, i) => (
+                  <motion.div
+                    key={track.songUrl + i}
+                    initial={{ opacity: 0, y: 10 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ delay: 0.1 + i * 0.15 }}
+                  >
+                    <SpotifyEmbed wide={true} url={track.songUrl} />
+                  </motion.div>
+                ))}
+              </div>
+            </motion.div>
+          </AnimatePresence>
+        </div>
       </div>
     </div>
   );
 };
 
 export default NowPlaying;
-
-

@@ -84,14 +84,14 @@
   
   #footer p {
     margin: 0;
-    font-size: 0.9rem;
-    color: #666666;
+    font-size: 0.75rem; /* Reduced font size to match target */
+    color: #6b7280;
     transition: color 0.2s ease-in-out;
-    font-family: 'Poppins', sans-serif;
+    font-family: 'Open Sans', 'Inter', sans-serif; /* Cleaner sans-serif font */
   }
   
   #footer.dark p {
-    color: #cccccc;
+    color: #64748b; /* Muted slate color matching target */
   }
   
   /* Responsive design */

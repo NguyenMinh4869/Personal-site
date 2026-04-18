@@ -2,11 +2,13 @@
 export const NOW_PLAYING_ENDPOINT = 'https://api.spotify.com/v1/me/player/currently-playing';
 export const TOKEN_ENDPOINT = 'https://accounts.spotify.com/api/token';
 export const RECENTLY_PLAYED_ENDPOINT = 'https://api.spotify.com/v1/me/player/recently-played';
+export const TOP_TRACKS_ENDPOINT = 'https://api.spotify.com/v1/me/top/tracks';
 
-// Read credentials from Vite env vars (ensure your .env uses VITE_ prefix)
-const client_id = '36fe464930874b2099d39fee34a5c972';
-const client_secret = '7785a307452042318a4f4d67f23ce405';
-const refresh_token = 'AQCvXOh0TMDIdhzdAUR9KcazPVmYWMt_yv7ubkzHjofBrHDm0cKp3VARivm9Am8yC-G-KBGwfUYR-5wJO1uT15FeY0PYJ9Crz0jsVuvjWUO8fekiZOn2PfURLZH40Avuvqc';
+// Read credentials from Vite env vars
+// Stripping stray quotes or semicolons just in case they are defined in .env
+const client_id = import.meta.env.VITE_SPOTIFY_CLIENT_ID?.replace(/[';]/g, '') || '36fe464930874b2099d39fee34a5c972';
+const client_secret = import.meta.env.VITE_SPOTIFY_CLIENT_SECRET?.replace(/[';]/g, '') || '7785a307452042318a4f4d67f23ce405';
+const refresh_token = import.meta.env.VITE_SPOTIFY_REFRESH_TOKEN?.replace(/[';]/g, '') || 'AQCvXOh0TMDIdhzdAUR9KcazPVmYWMt_yv7ubkzHjofBrHDm0cKp3VARivm9Am8yC-G-KBGwfUYR-5wJO1uT15FeY0PYJ9Crz0jsVuvjWUO8fekiZOn2PfURLZH40Avuvqc';
 
 // Function to generate an access token using the refresh token every time the website is opened or refreshed
 export const getAccessToken = async (clientId = client_id, clientSecret = client_secret, refreshToken = refresh_token) => {
@@ -134,6 +136,39 @@ export const getRecentlyPlayed = async (limit = 4) => {
     return tracks;
   } catch (error) {
     console.error('Error fetching recently played: ', error);
+    return [];
+  }
+};
+
+// Fetch Top Tracks
+export const getTopTracks = async (limit = 5) => {
+  try {
+    const { access_token } = await getAccessToken();
+
+    const url = `${TOP_TRACKS_ENDPOINT}?time_range=short_term&limit=${encodeURIComponent(limit)}`;
+    const response = await fetch(url, {
+      headers: {
+        Authorization: `Bearer ${access_token}`,
+      },
+    });
+
+    if (!response.ok) {
+      const text = await response.text();
+      console.error('[Spotify] Fetch top tracks error:', response.status, text);
+      return [];
+    }
+
+    const data = await response.json();
+    return (data.items || []).map((track) => ({
+      id: track.id,
+      title: track.name,
+      artists: track.artists.map((a) => a.name).join(', '),
+      songUrl: track.external_urls.spotify,
+      albumImageUrl: track.album?.images?.[0]?.url,
+      durationMs: track.duration_ms,
+    }));
+  } catch (error) {
+    console.error('Error fetching top tracks: ', error);
     return [];
   }
 };

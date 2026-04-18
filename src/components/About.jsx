@@ -9,6 +9,7 @@ import movieTheaterPreview from '../assets/movie theater.png';
 import netflixPreview from '../assets/net-flix.png';
 import personalWebsitePreview from '../assets/personal site.png';
 import toyStoryPreview from '../assets/toy-story.png';
+import PhotoCard from './PhotoCard';
 
 const Section = ({ title, children }) => (
   <section className="about-section">
@@ -19,83 +20,54 @@ const Section = ({ title, children }) => (
   </section>
 );
 
-const DraggableCard = ({ className, rotationDeg, delayClass, children }) => {
-  const cardRef = useRef(null);
-  const posRef = useRef({ x: 0, y: 0 });
-  const startRef = useRef({ x: 0, y: 0 });
-  const [isDragging, setIsDragging] = useState(false);
+// Custom DraggableCard has been cleanly replaced by Framer Motion's built-in <motion.div drag /> mechanics.
+import { motion } from 'framer-motion';
 
-  const onPointerDown = (e) => {
-    // Prevent default ghost image dragging
-    if (e.type === 'mousedown') {
-      e.preventDefault();
-    }
-    
-    // Bring clicked card to front
-    const allCards = document.querySelectorAll('.collage-card');
-    allCards.forEach(c => c.style.zIndex = '1');
-    if (cardRef.current) {
-      cardRef.current.style.zIndex = '50';
-      // Smooth scale up effect when picked
-      cardRef.current.style.transition = 'transform 0.2s cubic-bezier(0.2, 0.8, 0.2, 1)';
-      cardRef.current.style.transform = `translate(${posRef.current.x}px, ${posRef.current.y}px) rotate(${rotationDeg}deg) scale(1.05)`;
-    }
-    
-    setIsDragging(true);
-    const point = 'touches' in e ? e.touches[0] : e;
-    startRef.current = { x: point.clientX - posRef.current.x, y: point.clientY - posRef.current.y };
-    
-    window.addEventListener('mousemove', onPointerMove);
-    window.addEventListener('touchmove', onPointerMove, { passive: false });
-    window.addEventListener('mouseup', onPointerUp);
-    window.addEventListener('touchend', onPointerUp);
-  };
-
-  const onPointerMove = (e) => {
-    const point = 'touches' in e ? e.touches[0] : e;
-    if ('touches' in e && e.cancelable) e.preventDefault();
-    
-    const newX = point.clientX - startRef.current.x;
-    const newY = point.clientY - startRef.current.y;
-    posRef.current = { x: newX, y: newY };
-    
-    if (cardRef.current) {
-      cardRef.current.style.transition = 'none'; 
-      cardRef.current.style.transform = `translate(${newX}px, ${newY}px) rotate(${rotationDeg}deg) scale(1.05)`;
-    }
-  };
-
-  const onPointerUp = () => {
-    setIsDragging(false);
-    if (cardRef.current) {
-      cardRef.current.style.transition = 'transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275)';
-      cardRef.current.style.transform = `translate(${posRef.current.x}px, ${posRef.current.y}px) rotate(${rotationDeg}deg) scale(1)`;
-    }
-    window.removeEventListener('mousemove', onPointerMove);
-    window.removeEventListener('touchmove', onPointerMove);
-    window.removeEventListener('mouseup', onPointerUp);
-    window.removeEventListener('touchend', onPointerUp);
-  };
-
-  const initialTransform = `translate(${posRef.current.x}px, ${posRef.current.y}px) rotate(${rotationDeg}deg)`;
-
-  return (
-    <div
-      ref={cardRef}
-      className={`${className} ${isDragging ? 'dragging' : ''}`}
-      style={{ transform: initialTransform }}
-      onMouseDown={onPointerDown}
-      onTouchStart={onPointerDown}
-    >
-      <div className={`enter-wrapper ${delayClass || ''}`}>
-        {children}
-      </div>
-    </div>
-  );
-};
+const photosData = [
+  {
+    image: img1,
+    date: "September 2023",
+    location: "FM Cloth Store",
+    caption: "Trying on clothes and realized I look too handsome",
+    style: "img-1",
+    rotationDeg: -6
+  },
+  {
+    image: img2,
+    date: "August 2024",
+    location: "Boba with friends",
+    caption: "At that time, I still had long hair T_T",
+    style: "img-2",
+    rotationDeg: -2
+  },
+  {
+    image: img3,
+    date: "June 2025",
+    location: "Binh Ba with my bois",
+    caption: "This spot is truly gorgeous.",
+    style: "img-3",
+    rotationDeg: 4
+  },
+  {
+    image: img4,
+    date: "Feb 2024",
+    location: "The first day of the Lunar New Year",
+    caption: "thinking about life :D",
+    style: "img-4",
+    rotationDeg: 6
+  }
+];
 
 const About = () => {
   const { isDarkMode } = useDarkMode();
+  const [isMobile, setIsMobile] = useState(false);
+
+  useEffect(() => {
+    const checkMobile = () => setIsMobile(window.innerWidth <= 768);
+    checkMobile();
+    window.addEventListener('resize', checkMobile);
+    return () => window.removeEventListener('resize', checkMobile);
+  }, []);
 
   useEffect(() => {
     // add page fade once on mount
@@ -113,71 +85,49 @@ const About = () => {
           <p className="about-subtitle animate-fade-in-up delay-2">Welcome to my personal space where I share my journey, projects, and experiences.</p>
         </header>
 
-        {/* Photo collage */}
-        <div className="photo-collage">
-          <DraggableCard className="collage-card img-1" delayClass="delay-photo-1" rotationDeg={-6}>
-            <div className="flip">
-              <div className="front">
-                <img src={img1} alt="memory-1" />
-              </div>
-              <div className="back">
-                <div className="back-content">
-                  <div className="back-title">September 2023</div>
-                  <div className="back-sub">FM Cloth Store</div>
-                  <p>Trying on clothes and realized I look too handsome</p>
-                </div>
-              </div>
-            </div>
-          </DraggableCard>
-
-          <DraggableCard className="collage-card img-2" delayClass="delay-photo-2" rotationDeg={-2}>
-            <div className="flip">
-              <div className="front">
-                <img src={img2} alt="memory-2" />
-              </div>
-              <div className="back">
-                <div className="back-content">
-                  <div className="back-title">August 2024</div>
-                  <div className="back-sub">Boba with friends</div>
-                  <p>At that time, I still had long hair T_T</p>
-                </div>
-              </div>
-            </div>
-          </DraggableCard>
-
-          <DraggableCard className="collage-card img-3" delayClass="delay-photo-3" rotationDeg={4}>
-            <div className="flip">
-              <div className="front">
-                <img src={img3} alt="memory-3" />
-              </div>
-              <div className="back">
-                <div className="back-content">
-                  <div className="back-title">June 2025</div>
-                  <div className="back-sub">Binh Ba with my bois</div>
-                  <p>This spot is truly gorgeous.</p>
-                </div>
-              </div>
-            </div>
-          </DraggableCard>
-
-          <DraggableCard className="collage-card img-4" delayClass="delay-photo-4" rotationDeg={6}>
-            <div className="flip">
-              <div className="front">
-                <img src={img4} alt="memory-4" />
-              </div>
-              <div className="back">
-                <div className="back-content">
-                  <div className="back-title">Feb 2024</div>
-                  <div className="back-sub">The first day of the Lunar New Year</div>
-                  <p>thinking about life :D</p>
-                </div>
-              </div>
-            </div>
-          </DraggableCard>
-        </div>
+        {/* Framer Motion Photo Gallery integrated from user's snippet */}
+        <motion.div 
+          className="photo-collage"
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ duration: 0.5 }}
+        >
+          {photosData.map((photo, index) => (
+            <motion.div
+              key={index}
+              className={`collage-card ${photo.style}`}
+              custom={index}
+              initial={{ opacity: 0, y: 150, scale: 0.85, rotate: photo.rotationDeg - 8 }}
+              animate={{ opacity: 1, y: 0, scale: 1, rotate: photo.rotationDeg }}
+              transition={{ 
+                delay: index * 0.15, 
+                duration: 0.8, 
+                type: "spring", stiffness: 200, damping: 20 
+              }}
+              style={{ zIndex: 10 + index }}
+              drag={!isMobile}
+              dragConstraints={{
+                top: -100,
+                left: -350,
+                right: 350,
+                bottom: 250
+              }}
+              dragElastic={0.1}
+              whileHover={!isMobile ? { scale: 1.05, zIndex: 50 } : undefined}
+              whileDrag={{ scale: 1.1, zIndex: 100, cursor: 'grabbing' }}
+            >
+              <PhotoCard 
+                image={photo.image}
+                date={photo.date}
+                location={photo.location}
+                caption={photo.caption}
+              />
+            </motion.div>
+          ))}
+        </motion.div>
 
 
-        <div className="about-section section-aside-grid stagger-fade">
+        <div className="about-section stagger-fade">
           <h2 className="about-section-title">Projects</h2>
           <div className="project-list">
             <div className="project-item">
@@ -224,7 +174,6 @@ const About = () => {
                 <span className="badge-spotify">Spotify API</span>
                 <span className="badge-js">JavaScript</span>
                 <span className="badge-tailwind">Tailwind</span>
-
               </div>
               <div className="project-preview"><img src={personalWebsitePreview} alt="Personal Website Preview" /></div>
             </div>
@@ -268,23 +217,28 @@ const About = () => {
 
 
         <Section title="Hobbies">
-          <div className="grid grid-two">
+          <div className="grid">
             <div className="hobby">
-              <div className="hobby-title">Editting</div>
+              <div className="hobby-title">Editing</div>
               <div className="hobby-desc">I usually edit videos when I have free time</div>
-              <a className="hobby-link" href="https://www.youtube.com/watch?v=X2H4AQGzK10">1 of my videos</a>
+              <a className="hobby-link" href="https://www.youtube.com/watch?v=X2H4AQGzK10" target="_blank" rel="noopener noreferrer">
+                <div className="hobby-stat stat-red">1 of my videos</div>
+              </a>
             </div>
             <div className="hobby">
               <div className="hobby-title">Video games</div>
               <div className="hobby-desc">Not too much but I still like to play them,...</div>
+              <div className="hobby-stat stat-blue">Gaming sessions</div>
             </div>
             <div className="hobby">
               <div className="hobby-title">Hanging out with friends</div>
               <div className="hobby-desc">mostly hanging out and eating.</div>
+              <div className="hobby-stat stat-green">Good times</div>
             </div>
             <div className="hobby">
               <div className="hobby-title">Sleeping</div>
               <div className="hobby-desc">I can sleep for 10 hours</div>
+              <div className="hobby-stat stat-purple">Resting well</div>
             </div>
           </div>
         </Section>

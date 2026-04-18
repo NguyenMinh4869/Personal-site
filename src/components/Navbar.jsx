@@ -55,40 +55,52 @@ const Navbar = () => {
           <div className="navbar-center desktop-nav">
             <div className="nav-links-container">
               <ul className="nav-links">
-                {navItems.map((item, index) => (
-                  <li key={item.path}>
-                    {item.path.startsWith('#') ? (
-                      <a href={item.path} className="nav-link">
-                        {item.label}
-                      </a>
-                    ) : (
-                      <NavLink 
-                        to={item.path} 
-                        end 
-                        className={({ isActive }) => `nav-link ${isActive ? 'active' : ''}`}
-                      >
-                        {item.label}
-                      </NavLink>
-                    )}
-                  </li>
-                ))}
+                {navItems.map((item, index) => {
+                  const isActive = getCurrentIndex() === index;
+                  
+                  return (
+                    <li key={item.path} style={{ position: 'relative' }}>
+                      {item.path.startsWith('#') ? (
+                        <a href={item.path} className={`nav-link ${isActive ? 'active' : ''}`}>
+                          <span style={{ position: 'relative', zIndex: 10 }}>{item.label}</span>
+                          {isActive && (
+                            <motion.div
+                              layoutId="nav-indicator"
+                              className="nav-indicator"
+                              initial={false}
+                              transition={{
+                                type: "spring",
+                                stiffness: 400,
+                                damping: 25
+                              }}
+                            />
+                          )}
+                        </a>
+                      ) : (
+                        <NavLink 
+                          to={item.path} 
+                          end 
+                          className={({ isActive: isRoutingActive }) => `nav-link ${isRoutingActive ? 'active' : ''}`}
+                        >
+                          <span style={{ position: 'relative', zIndex: 10 }}>{item.label}</span>
+                          {isActive && (
+                            <motion.div
+                              layoutId="nav-indicator"
+                              className="nav-indicator"
+                              initial={false}
+                              transition={{
+                                type: "spring",
+                                stiffness: 400,
+                                damping: 25
+                              }}
+                            />
+                          )}
+                        </NavLink>
+                      )}
+                    </li>
+                  );
+                })}
               </ul>
-              
-              {/* Animated background indicator */}
-              <motion.div
-                className="nav-indicator"
-                layoutId="nav-indicator"
-                initial={false}
-                animate={{
-                  x: getCurrentIndex() * (90 + 16), // 90px width + 16px gap
-                  width: 90
-                }}
-                transition={{
-                  type: "spring",
-                  stiffness: 400,
-                  damping: 25
-                }}
-              />
             </div>
           </div>
           
