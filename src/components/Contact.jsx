@@ -16,7 +16,6 @@ const ContactCard = ({ href, title, subtitle, Icon }) => {
           <div className="contact-card-subtitle">{subtitle}</div>
         </div>
       </div>
-      <div className="card-glow" aria-hidden="true" />
     </a>
   );
 };

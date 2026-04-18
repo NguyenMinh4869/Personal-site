@@ -101,6 +101,10 @@
   -webkit-user-select: none;
 }
 
+.collage-card:hover {
+  z-index: 10;
+}
+
 .collage-card:hover .flip {
   transform: rotateY(180deg);
 }
@@ -143,10 +147,10 @@
 .back-sub { opacity: 0.8; margin-bottom: 8px; }
 .back p { opacity: 0.9; margin: 0; }
 
-.img-1 { left: -10px; top: 40px; transform: rotate(-6deg); }
-.img-2 { left: 140px; top: 10px; transform: rotate(-2deg); }
-.img-3 { left: 320px; top: 0px; transform: rotate(4deg); }
-.img-4 { left: 520px; top: 20px; transform: rotate(6deg); }
+.img-1 { left: 0px; top: 40px; transform: rotate(-5deg); z-index: 1; }
+.img-2 { left: 135px; top: 12px; transform: rotate(4deg); z-index: 2; }
+.img-3 { left: 270px; top: 0px; transform: rotate(-3deg); z-index: 3; }
+.img-4 { left: 405px; top: 20px; transform: rotate(5deg); z-index: 2; }
 
 @media (max-width: 900px) {
   .about-content {
